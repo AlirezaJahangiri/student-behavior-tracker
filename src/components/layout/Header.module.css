@@ -1,0 +1,133 @@
+.header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  background: #2c7be5;
+  z-index: 10;
+  gap: 1rem;
+}
+
+.signin {
+  background-color: #f9fafb;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+}
+
+/*icon sign up*/
+.signinIcon {
+  color: #2c7be5;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/*desktop menu*/
+.desktopNav ul {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.desktopNav li a {
+  text-decoration: none;
+  color: #f9fafb;
+  font-weight: 200;
+}
+
+/* نمایش موبایل: فقط آیکون همبرگر و ورود کنار هم */
+@media (max-width: 768px) {
+  .desktopNav {
+    display: none;
+  }
+  .lableSignin {
+    display: none;
+  }
+  .signinIcon {
+    height: 2.4rem;
+    width: 2.4rem;
+    font-size: 1.8rem;
+    color: #f9fafb;
+    display: inline-flex;
+  }
+  .signin {
+    background: none;
+    padding: 0;
+  }
+}
+
+/* دکمه همبرگر */
+.menuBtn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #f9fafb;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.4rem; /* ارتفاع ثابت */
+  width: 2.4rem; /* عرض ثابت */
+  padding: 0;
+}
+
+.mobileMenuBtn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobileMenuBtn {
+    display: block;
+  }
+}
+
+/* منوی کشویی از سمت راست */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 250px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -3px 0 8px rgba(0, 0, 0, 0.1);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 15;
+  padding: 2rem 1rem;
+}
+
+.drawer.open {
+  transform: translateX(0%);
+}
+
+.drawer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.drawer li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* بک‌گراند محو هنگام باز بودن منو */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
