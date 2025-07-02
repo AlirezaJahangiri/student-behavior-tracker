@@ -59,6 +59,9 @@
     background: none;
     padding: 0;
   }
+  .header {
+    padding: 0.4rem;
+  }
 }
 
 /* دکمه همبرگر */
