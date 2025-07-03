@@ -1,0 +1,57 @@
+.container {
+  color: #f9fafb;
+  background-color: #2c7be5;
+  border-radius: 8px;
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.pavaragi {
+  margin-top: 0.6rem;
+}
+
+.sec1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title h3 {
+  font-weight: 600;
+}
+
+.ways ul li {
+  list-style: disc;
+}
+
+.social {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.creator {
+  display: flex;
+  justify-content: center;
+}
+
+.creatorName {
+  font-weight: 400;
+}
+
+@media (max-width: 770px) {
+  .sec1 {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: start;
+    padding: 1.4rem;
+  }
+
+  .pavaragi {
+    display: none;
+  }
+
+  .creator {
+    margin-top: 1rem;
+  }
+}

@@ -134,3 +134,11 @@
   background: rgba(0, 0, 0, 0.3);
   z-index: 10;
 }
+
+.signin:hover {
+  background: none;
+  transition: all ease-in 0.3s;
+  .signinIcon {
+    color: #f9fafb;
+  }
+}
