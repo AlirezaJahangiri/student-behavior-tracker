@@ -7,6 +7,7 @@ import { FiEdit } from "react-icons/fi";
 import Card from "@/module/Card";
 import styles from "@/module/DashboardCard.module.css";
 import { useState } from "react";
+import { p2e } from "@/utils/replaceNumber";
 
 function DashboardCard({ data }) {
   const [search, setSearch] = useState("");
@@ -43,13 +44,13 @@ function DashboardCard({ data }) {
     <div className={styles.container}>
       <input
         type="text"
-        placeholder="جستجو بر اساس نام یا کد ملی"
+        placeholder="جستجو  بر اساس نام  یا  شماره  دانش آموزی"
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => setSearch(p2e(e.target.value))} // 👈 تبدیل اعداد فارسی به انگلیسی
         style={{ padding: "8px", marginBottom: "20px", width: "100%" }}
       />
 
-      {filtered.length === 0 && <p>موردی یافت نشد.</p>}
+      {filtered.length === 0 && <p className={styles.searchNotFound}>موردی یافت نشد...</p>}
 
       {filtered.map((profile) => (
         <div key={profile._id}>

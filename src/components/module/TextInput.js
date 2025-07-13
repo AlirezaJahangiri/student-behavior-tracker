@@ -9,8 +9,21 @@ function TextInput({
   textarea = false,
 }) {
   const changeHandler = (e) => {
-    const { name, value } = e.target;
-    setProfileData({ ...profileData, [name]: value });
+    let { name: fieldName, value } = e.target;
+
+    // اگر فیلد classNumber بود: فقط عدد، حداکثر 3 رقم
+    if (fieldName === "classNumber") {
+      value = p2e(value).replace(/\D/g, ""); // فقط عدد
+      if (value.length > 3) return; // حداکثر ۳ رقم
+    }
+
+    // اگر فیلد nationalId بود: فقط عدد، حداکثر ۱۲ رقم
+    if (fieldName === "nationalId") {
+      value = p2e(value).replace(/\D/g, ""); // فقط عدد
+      if (value.length > 12) return; // حداکثر ۱۲ رقم
+    }
+
+    setProfileData({ ...profileData, [fieldName]: value });
   };
 
   return (
@@ -18,7 +31,6 @@ function TextInput({
       <p>{title}</p>
       {textarea ? (
         <textarea
-          type="text"
           name={name}
           value={profileData[name]}
           onChange={changeHandler}
@@ -29,6 +41,9 @@ function TextInput({
           name={name}
           value={profileData[name]}
           onChange={changeHandler}
+          maxLength={
+            name === "classNumber" ? 3 : name === "nationalId" ? 12 : undefined
+          }
         />
       )}
     </div>

@@ -42,6 +42,9 @@ function AddProfilePage({ data }) {
     } else {
       toast.success(data.message);
       router.refresh();
+      setTimeout(() => {
+        router.push("/dashboard/my-profiles");
+      }, 1000);
     }
   };
 
@@ -59,6 +62,9 @@ function AddProfilePage({ data }) {
     } else {
       toast.success(data.message);
       router.refresh();
+      setTimeout(() => {
+        router.push("/dashboard/my-profiles");
+      }, 1000);
     }
   };
 
@@ -67,7 +73,7 @@ function AddProfilePage({ data }) {
       <h3>{data ? "ویرایش مورد انضباطی" : "ثبت مورد انضباطی"}</h3>
       <div className={styles.inputs}>
         <TextInput
-          title="کد ملی یا شماره دانش آموزی"
+          title="شماره دانش آموزی"
           name="nationalId"
           profileData={profileData}
           setProfileData={setProfileData}
