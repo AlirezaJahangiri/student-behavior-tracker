@@ -5,8 +5,11 @@ import styles from "./Header.module.css";
 import { CiLogin } from "react-icons/ci";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useState } from "react";
+import { FaUser } from "react-icons/fa";
+import { useSession } from "next-auth/react";
 
 function Header() {
+  const { data } = useSession();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -31,17 +34,28 @@ function Header() {
             <Link href="/">صفحه اصلی</Link>
           </li>
           <li>
-            <Link href="/buy-residential">آگهی‌ها</Link>
+            <Link href="/">درباره ما</Link>
           </li>
         </ul>
       </nav>
 
       {/* آیکون ورود (نمایش در تمام دستگاه‌ها) */}
       <div className={styles.signin}>
-        <Link className={styles.signinIcon} href="/signin" aria-label="ورود">
-          <CiLogin />
-          <span className={styles.lableSignin}>ورود</span>
-        </Link>
+        {data ? (
+          <Link
+            className={styles.signinIcon}
+            href="/dashboard"
+            aria-label="داشبورد"
+          >
+            <FaUser />
+            <span className={styles.lableSignin}>داشبورد</span>
+          </Link>
+        ) : (
+          <Link className={styles.signinIcon} href="/signin" aria-label="ورود">
+            <CiLogin />
+            <span className={styles.lableSignin}>ورود</span>
+          </Link>
+        )}
       </div>
 
       {/* منوی کشویی موبایل */}
@@ -53,8 +67,8 @@ function Header() {
             </Link>
           </li>
           <li>
-            <Link href="/buy-residential" onClick={() => setIsOpen(false)}>
-              آگهی‌ها
+            <Link href="/" onClick={() => setIsOpen(false)}>
+              درباره ما
             </Link>
           </li>
         </ul>

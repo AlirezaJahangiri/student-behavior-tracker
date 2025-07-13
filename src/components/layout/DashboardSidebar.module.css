@@ -1,0 +1,113 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 80px;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: fit-content;
+  padding: 30px 15px;
+  border-radius: 10px;
+  box-shadow: #304ffe4a 0px 4px 15px;
+  margin-left: 40px;
+  width: 220px;
+}
+
+.sidebar svg {
+  font-size: 3rem;
+  color: #304ffe;
+}
+
+.sidebar p {
+  color: #333333;
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-top: 20px;
+}
+
+.seperator {
+  background-color: #304ffe;
+  width: 100%;
+  height: 1px;
+  background-color: silver;
+  margin-bottom: 30px;
+}
+
+.sidebar span {
+  width: 100%;
+  height: 1px;
+  margin-bottom: 30px;
+}
+.main {
+  width: 100%;
+}
+
+.sidebar a {
+  display: block;
+  padding: 10px 14px;
+  margin: 5px 0 8px;
+  font-weight: 400;
+  width: 100%;
+  text-decoration: none;
+  color: black; /* پیش‌فرض: خاکستری تیره */
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background-color: #4a90e2;
+  z-index: 0;
+  transition: width 0.4s ease;
+  border-radius: 8px;
+}
+
+.sidebar a:hover::before {
+  width: 100%;
+}
+
+.sidebar a:hover span {
+  color: #fff;
+}
+
+.sidebar a span {
+  position: relative;
+  z-index: 1;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+/* ✅ لینک فعال با رنگ سفید */
+.active {
+  background-color: #4a90e2;
+  font-weight: bold;
+  transform: scale(1.02);
+  animation: pop 0.25s ease;
+}
+
+.active span {
+  color: #fff !important;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1.02);
+  }
+}
+
