@@ -1,14 +1,21 @@
-import { ThreeDots } from "react-loader-spinner";
+import { SyncLoader } from "react-spinners";
 
 function Loader() {
   return (
-    <ThreeDots
-      color="#0088CC"
-      height={45}
-      ariaLabel="three-dots-loading"
-      visible={true}
-      wrapperStyle={{ margin: "auto" }}
-    />
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <SyncLoader
+        visible={true}
+        width="200"
+        color="#229ED9"
+        ariaLabel="infinity-spin-loading"
+      />
+    </div>
   );
 }
 

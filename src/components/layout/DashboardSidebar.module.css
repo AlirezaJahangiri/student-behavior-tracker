@@ -14,13 +14,19 @@
   box-shadow: #304ffe4a 0px 4px 15px;
   margin-left: 40px;
   width: 220px;
+  background-color: #fff;
+  transition: transform 0.3s ease-in-out;
+  position: relative;
+  z-index: 10;
 }
 
+/* آیکون */
 .sidebar svg {
   font-size: 3rem;
   color: #304ffe;
 }
 
+/* ایمیل */
 .sidebar p {
   color: #333333;
   font-size: 1.1rem;
@@ -29,10 +35,9 @@
 }
 
 .seperator {
-  background-color: #304ffe;
+  background-color: silver;
   width: 100%;
   height: 1px;
-  background-color: silver;
   margin-bottom: 30px;
 }
 
@@ -41,10 +46,12 @@
   height: 1px;
   margin-bottom: 30px;
 }
+
 .main {
   width: 100%;
 }
 
+/* لینک‌ها */
 .sidebar a {
   display: block;
   padding: 10px 14px;
@@ -52,11 +59,12 @@
   font-weight: 400;
   width: 100%;
   text-decoration: none;
-  color: black; /* پیش‌فرض: خاکستری تیره */
+  color: black;
   border-radius: 8px;
   position: relative;
   overflow: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
 }
 
 .sidebar a::before {
@@ -87,7 +95,6 @@
   transition: color 0.3s ease;
 }
 
-/* ✅ لینک فعال با رنگ سفید */
 .active {
   background-color: #4a90e2;
   font-weight: bold;
@@ -108,5 +115,65 @@
   }
   100% {
     transform: scale(1.02);
+  }
+}
+
+/* همبرگر (مخفی در دسکتاپ) */
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  z-index: 1001;
+  cursor: pointer;
+}
+
+/* انیمیشن بستن */
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* حالت باز و بسته سایدبار */
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar.close {
+  animation: slideOut 0.3s forwards;
+}
+
+/* حالت موبایل */
+@media (max-width: 771px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 220px;
+    transform: translateX(100%);
+    padding-top: 80px;
+    background-color: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .main {
+    width: 100%;
+    padding: 16px;
   }
 }
