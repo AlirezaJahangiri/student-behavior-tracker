@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Toaster, toast } from "react-hot-toast";
+import { motion } from "framer-motion";
 import styles from "@/templates/SignupPage.module.css";
 import Loader from "@/module/Loader";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
@@ -34,19 +35,49 @@ function SigninPage() {
   };
 
   return (
-    <div className={styles.form}>
-      <h4>فرم ورود</h4>
-      <form>
-        <input
-          placeholder="Username"
+    <motion.div
+      className={styles.form}
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
+      <motion.h4
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        فرم ورود
+      </motion.h4>
+
+      <motion.form
+        onSubmit={signinHandler}
+        initial="hidden"
+        animate="visible"
+        variants={{
+          visible: { transition: { staggerChildren: 0.1 } },
+        }}
+      >
+        <motion.input
           type="text"
+          placeholder="Username"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          variants={{
+            hidden: { opacity: 0, x: -20 },
+            visible: { opacity: 1, x: 0 },
+          }}
         />
-        <div style={{ position: "relative" }}>
+
+        <motion.div
+          style={{ position: "relative" }}
+          variants={{
+            hidden: { opacity: 0, x: -20 },
+            visible: { opacity: 1, x: 0 },
+          }}
+        >
           <input
-            placeholder="Password"
             type={showPassword ? "text" : "password"}
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -64,21 +95,39 @@ function SigninPage() {
           >
             {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
           </span>
-        </div>
+        </motion.div>
+
         {loading ? (
           <Loader />
         ) : (
-          <button type="submit" onClick={signinHandler}>
+          <motion.button
+            type="submit"
+            className={styles.submit}
+            variants={{
+              hidden: { opacity: 0, y: 10 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             ورود به سامانه
-          </button>
+          </motion.button>
         )}
-      </form>
-      <p>
-        حساب کاربری ندارید؟
-        <Link href="/signup">ثبت نام</Link>
-      </p>
+      </motion.form>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+      >
+        حساب کاربری ندارید؟{" "}
+        <Link href="/signup" className={styles.link}>
+          ثبت نام
+        </Link>
+      </motion.p>
+
       <Toaster />
-    </div>
+    </motion.div>
   );
 }
 

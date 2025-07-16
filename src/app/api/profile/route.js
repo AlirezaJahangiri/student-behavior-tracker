@@ -5,14 +5,14 @@ import connectDB from "@/utils/connectDB";
 import User from "@/models/User";
 import Profile from "@/models/Profile";
 
-// GET: دریافت همه پروفایل‌ها
+// GET: دریافت همه پروفایل‌های منتشر شده
 export async function GET() {
   try {
     await connectDB();
     const profiles = await Profile.find({ published: true }).select("-userId");
     return NextResponse.json({ data: profiles }, { status: 200 });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: "مشکلی در سرور رخ داده است" },
       { status: 500 }
@@ -33,38 +33,47 @@ export async function POST(req) {
       punishments = [],
     } = await req.json();
 
+    if (!classNumber || !nationalId || !studentName) {
+      return NextResponse.json(
+        { error: "لطفا همه فیلدها را تکمیل کنید" },
+        { status: 400 }
+      );
+    }
+
     const session = await getServerSession(req);
     if (!session) {
       return NextResponse.json(
-        { error: "لطفا وارد حساب کاربری خود شوید" },
+        { error: "لطفا ابتدا وارد حساب کاربری شوید" },
         { status: 401 }
       );
     }
 
     const user = await User.findOne({ email: session.user.email });
     if (!user) {
+      return NextResponse.json({ error: "کاربر یافت نشد" }, { status: 404 });
+    }
+
+    const existingProfile = await Profile.findOne({
+      userId: user._id,
+      nationalId,
+    });
+
+    if (existingProfile) {
       return NextResponse.json(
-        { error: "حساب کاربری یافت نشد" },
-        { status: 404 }
+        { error: "این مورد قبلاً ثبت شده است" },
+        { status: 409 }
       );
     }
 
-    if (!classNumber || !nationalId || !studentName) {
-      return NextResponse.json(
-        { error: "لطفا اطلاعات معتبر وارد کنید" },
-        { status: 400 }
-      );
-    }
-
-    // فیلتر موارد ناقص
     const cleanedEncouragements = encouragements.filter(
       (item) => item?.text?.trim() && item?.date
     );
+
     const cleanedPunishments = punishments.filter(
       (item) => item?.text?.trim() && item?.date
     );
 
-    const newProfile = await Profile.create({
+    await Profile.create({
       classNumber,
       nationalId,
       studentName,
@@ -74,19 +83,19 @@ export async function POST(req) {
     });
 
     return NextResponse.json(
-      { message: "مورد انضباطی جدید اضافه شد" },
+      { message: "مورد انضباطی با موفقیت ثبت شد" },
       { status: 201 }
     );
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     return NextResponse.json(
-      { error: "مشکلی در سرور رخ داده است" },
+      { error: "خطای سرور. لطفاً بعداً تلاش کنید" },
       { status: 500 }
     );
   }
 }
 
-// PATCH: ویرایش پروفایل موجود
+// PATCH: ویرایش پروفایل
 export async function PATCH(req) {
   try {
     await connectDB();
@@ -100,62 +109,73 @@ export async function PATCH(req) {
       punishments = [],
     } = await req.json();
 
+    if (!_id || !classNumber || !nationalId || !studentName) {
+      return NextResponse.json(
+        { error: "لطفا همه فیلدها را تکمیل کنید" },
+        { status: 400 }
+      );
+    }
+
     const session = await getServerSession(req);
     if (!session) {
       return NextResponse.json(
-        { error: "لطفا وارد حساب کاربری خود شوید" },
+        { error: "ابتدا وارد حساب کاربری شوید" },
         { status: 401 }
       );
     }
 
     const user = await User.findOne({ email: session.user.email });
     if (!user) {
-      return NextResponse.json(
-        { error: "حساب کاربری یافت نشد" },
-        { status: 404 }
-      );
-    }
-
-    if (!classNumber || !nationalId || !studentName || !_id) {
-      return NextResponse.json(
-        { error: "لطفا اطلاعات معتبر وارد کنید" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "کاربر یافت نشد" }, { status: 404 });
     }
 
     const profile = await Profile.findById(_id);
     if (!profile) {
-      return NextResponse.json({ error: "پروفایل یافت نشد" }, { status: 404 });
+      return NextResponse.json(
+        { error: "پروفایل مورد نظر پیدا نشد" },
+        { status: 404 }
+      );
     }
+
     if (!user._id.equals(profile.userId)) {
       return NextResponse.json(
-        { error: "دسترسی شما محدود شده است" },
+        { error: "شما مجاز به ویرایش این مورد نیستید" },
         { status: 403 }
       );
     }
 
-    // فیلتر موارد ناقص
-    const cleanedEncouragements = encouragements.filter(
-      (item) => item?.text?.trim() && item?.date
-    );
-    const cleanedPunishments = punishments.filter(
-      (item) => item?.text?.trim() && item?.date
-    );
+    // بررسی تکراری بودن nationalId برای سایر پروفایل‌ها
+    const duplicate = await Profile.findOne({
+      _id: { $ne: _id },
+      userId: user._id,
+      nationalId,
+    });
+
+    if (duplicate) {
+      return NextResponse.json(
+        { error: "این کد ملی قبلاً در یک مورد دیگر استفاده شده است" },
+        { status: 409 }
+      );
+    }
 
     profile.classNumber = classNumber;
     profile.nationalId = nationalId;
     profile.studentName = studentName;
-    profile.encouragements = cleanedEncouragements;
-    profile.punishments = cleanedPunishments;
+    profile.encouragements = encouragements.filter(
+      (item) => item?.text?.trim() && item?.date
+    );
+    profile.punishments = punishments.filter(
+      (item) => item?.text?.trim() && item?.date
+    );
 
     await profile.save();
 
     return NextResponse.json(
-      { message: "مورد انضباطی با موفقیت ویرایش شد" },
+      { message: "ویرایش با موفقیت انجام شد" },
       { status: 200 }
     );
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: "مشکلی در سرور رخ داده است" },
       { status: 500 }
