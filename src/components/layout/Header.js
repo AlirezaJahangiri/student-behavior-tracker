@@ -16,6 +16,9 @@ function Header() {
 
   return (
     <header className={styles.header}>
+      <div className={styles.title}>
+        <span>سامانه جامع نظم دهی</span>
+      </div>
       <div className={styles.signin}>
         {data ? (
           <Link

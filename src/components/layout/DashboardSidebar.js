@@ -5,7 +5,7 @@ import LogoutButton from "@/module/LogoutButton";
 import styles from "@/layout/DashboardSidebar.module.css";
 import { usePathname } from "next/navigation";
 import { IoMdSchool } from "react-icons/io";
-import { MdOutlineMenuOpen } from "react-icons/md";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 import { useState, useEffect, useRef } from "react";
 
@@ -69,7 +69,7 @@ function DashboardSidebar({ children, email, role }) {
           onClick={() => setIsOpen((prev) => !prev)}
           aria-label="Toggle sidebar menu"
         >
-          <MdOutlineMenuOpen size={45} />
+          <GiHamburgerMenu size={35} />
         </button>
       )}
 
