@@ -4,9 +4,43 @@
   margin-bottom: 150px;
 }
 
+.inputsSec1,
+.inputsSec2,
+.inputsSec3 {
+  max-width: 1000px;
+  margin: auto;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
 
+.inputsSec2 {
+  display: flex;
+  justify-content: space-between;
+}
 
-.container h3 {
+.punishment {
+  background-color: #da5959;
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 80px;
+  width: 100%;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 15px;
+}
+
+.positive {
+  background-color: #10b981;
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 80px;
+  width: 100%;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 15px;
+}
+.title {
   font-size: 1.5rem;
   font-weight: 400;
   margin-bottom: 80px;
@@ -19,15 +53,21 @@
 
 .submit {
   border: none;
-  background-color: #304ffe;
+  background-color: #364f6b;
   color: #fff;
   font-size: 1rem;
   border-radius: 5px;
   transition: all ease-in 0.1s;
   cursor: pointer;
-  padding: 10px;
+  padding: 1rem;
 }
 
 .submit:hover {
   transform: scale(1.05);
+}
+
+@media (max-width: 500px) {
+  .submit {
+    padding: 0.5rem;
+  }
 }

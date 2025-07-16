@@ -50,22 +50,17 @@ function DashboardCard({ data }) {
         style={{ padding: "8px", marginBottom: "20px", width: "100%" }}
       />
 
-      {filtered.length === 0 && <p className={styles.searchNotFound}>موردی یافت نشد...</p>}
+      {filtered.length === 0 && (
+        <p className={styles.searchNotFound}>موردی یافت نشد...</p>
+      )}
 
       {filtered.map((profile) => (
-        <div key={profile._id}>
-          <Card data={profile} />
-          <div className={styles.main}>
-            <button onClick={() => editHandler(profile._id)}>
-              ویرایش
-              <FiEdit />
-            </button>
-            <button onClick={() => deleteHandler(profile._id)}>
-              حذف
-              <AiOutlineDelete />
-            </button>
-          </div>
-        </div>
+        <Card
+          key={profile._id}
+          data={profile}
+          onEdit={() => editHandler(profile._id)}
+          onDelete={() => deleteHandler(profile._id)}
+        />
       ))}
 
       <Toaster />

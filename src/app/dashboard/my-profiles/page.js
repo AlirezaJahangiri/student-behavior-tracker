@@ -24,7 +24,6 @@ async function Myprofiles() {
     ...profile,
     _id: profile._id.toString(),
     userId: profile.userId.toString(),
-    registeredAt: new Date(profile.registeredAt).toISOString(),
     createdAt: new Date(profile.createdAt).toISOString(),
     updatedAt: new Date(profile.updatedAt).toISOString(),
   }));

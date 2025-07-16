@@ -6,10 +6,24 @@
   font-size: 1.1rem;
   margin-bottom: 5px;
 }
+.deleteBtn {
+  color: #db0505;
+  background-color: #fff;
+  border: 1px #db0505 solid;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  border-radius: 5px;
+  transition: all ease-in 0.1s;
+  cursor: pointer;
+  padding: 4px 8px;
+  display: flex;
+  margin-top: 20px;
+}
 
-.container button {
+.addBtn {
   border: none;
-  background-color: #304ffe;
+  background-color: #7e88ba;
   color: #fff;
   font-size: 1rem;
   border-radius: 5px;
@@ -33,28 +47,55 @@
   display: flex;
   margin: 10px 0;
 }
-.card input {
-  width: 300px;
+
+.card textarea {
+  width: 500px;
   border: 1px #304ffe dashed;
-  color: grey;
+  color: black;
   border-radius: 5px;
   padding: 10px;
   font-size: 1rem;
-  height: 30px;
+  height: 100px;
   margin-left: 10px;
+  resize: vertical;
+  direction: rtl;
+  text-align: right;
+  vertical-align: top;
+  font-weight: 400;
 }
 
-.card input:focus {
+.card textarea:focus {
   border: 1px #304ffe solid;
   outline: none;
 }
 
-.card button {
-  margin: 0;
-  color: #db0505;
-  background-color: #fff;
-  border: 1px #db0505 solid;
-  display: flex;
-  align-items: center;
-  line-height: 10px;
+@media (max-width: 900px) {
+  .card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .divider {
+    display: none;
+  }
+
+  .card textarea {
+    width: 300px;
+    border: 1px #304ffe dashed;
+    color: black;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    height: 80px;
+    margin-left: 10px;
+    margin-bottom: 20px;
+  }
+}
+
+.divider {
+  height: 1px;
+  background-color: gray;
+  margin: 15px 0;
+  opacity: 0.6;
+  width: 100%;
 }

@@ -10,30 +10,29 @@ const profileSchema = new Schema(
       type: String,
       required: true,
     },
-    description: {
-      type: String,
-      required: true,
-    },
     studentName: {
       type: String,
       required: true,
     },
-
-    registeredAt: {
-      type: Date,
-      required: true,
-      default: Date.now,
-    },
-    category: {
-      type: String,
-      enum: ["تنبیهی", "تشویقی"],
-      required: true,
-    },
-    additionalDescription: {
-      type: [String],
+   
+    encouragements: {
+      type: [
+        {
+          text: { type: String, required: true },
+          date: { type: Date, required: true },
+        },
+      ],
       default: [],
     },
-
+    punishments: {
+      type: [
+        {
+          text: { type: String, required: true },
+          date: { type: Date, required: true },
+        },
+      ],
+      default: [],
+    },
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",

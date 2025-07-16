@@ -4,29 +4,28 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "react-hot-toast";
 import TextInput from "@/module/TextInput";
-import RadioList from "@/module/RadioList";
 import TextList from "@/module/TextList";
 import CustomDatePicker from "@/module/CustomDatePicker";
-import { BounceLoader } from "react-spinners";
 import styles from "@/templates/AddProfilePage.module.css";
+import Loader from "@/module/Loader";
+import { generatePdf } from "@/utils/pdfGenerator";
+import { motion } from "framer-motion";
 
 function AddProfilePage({ data }) {
   const [profileData, setProfileData] = useState({
     classNumber: "",
     nationalId: "",
-    description: "",
     studentName: "",
-    registeredAt: new Date(),
-    additionalDescription: [],
-    category: "",
+    encouragements: [],
+    punishments: [],
   });
   const [loading, setLoading] = useState(false);
 
+  const router = useRouter();
+
   useEffect(() => {
     if (data) setProfileData(data);
-  }, []);
-
-  const router = useRouter();
+  }, [data]);
 
   const submitHandler = async () => {
     setLoading(true);
@@ -68,13 +67,112 @@ function AddProfilePage({ data }) {
     }
   };
 
+  const handleSaveAndDownloadPdf = async () => {
+    setLoading(true);
+    const response = await fetch("/api/profile", {
+      method: data ? "PATCH" : "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(profileData),
+    });
+
+    const result = await response.json();
+    setLoading(false);
+
+    if (result.error) {
+      toast.error(result.error);
+      return;
+    }
+
+    toast.success(result.message);
+    generatePdf(profileData);
+
+    if (!data) {
+      setTimeout(() => {
+        router.refresh();
+        router.push("/dashboard/my-profiles");
+      }, 1000);
+    }
+  };
+
   return (
-    <div className={styles.container}>
-      <h3>{data ? "ویرایش مورد انضباطی" : "ثبت مورد انضباطی"}</h3>
-      <div className={styles.inputs}>
+    <motion.div
+      className={styles.container}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 30 }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
+      <div
+        id="pdf-content"
+        dir="rtl"
+        style={{
+          fontSize: "25px",
+          fontFamily: "Vazir",
+          padding: "30px",
+          width: "800px",
+          color: "#000",
+          backgroundColor: "#fff",
+          position: "absolute",
+          top: "-9999px",
+          right: "-9999px",
+          lineHeight: "2",
+        }}
+      >
+        <h2 style={{ textAlign: "center" }}>📝 گزارش انضباطی دانش‌آموز</h2>
+
+        <p>
+          <strong>👤 نام دانش‌آموز:</strong> {profileData.studentName || "-"}
+        </p>
+        <p>
+          <strong>🆔 کد دانش‌آموزی:</strong> {profileData.nationalId || "-"}
+        </p>
+        <p>
+          <strong>🏫 کلاس:</strong> {profileData.classNumber || "-"}
+        </p>
+
+        <hr />
+
+        <h3>🎉 تشویق‌ ها:</h3>
+        {profileData.encouragements?.length > 0 ? (
+          profileData.encouragements.map((item, index) => (
+            <p key={index}>
+              {index + 1}️⃣ - {new Date(item.date).toLocaleDateString("fa-IR")}{" "}
+              - {item.text || "-"}
+            </p>
+          ))
+        ) : (
+          <p>موردی ثبت نشده است</p>
+        )}
+
+        <hr />
+
+        <h3>⚠️ تنبیه‌ ها:</h3>
+        {profileData.punishments?.length > 0 ? (
+          profileData.punishments.map((item, index) => (
+            <p key={index}>
+              {index + 1}️⃣ - {new Date(item.date).toLocaleDateString("fa-IR")}{" "}
+              - {item.text || "-"}
+            </p>
+          ))
+        ) : (
+          <p>موردی ثبت نشده است</p>
+        )}
+      </div>
+
+      <h3 className={styles.title}>
+        {data ? "ویرایش مورد انضباطی" : "ثبت مورد انضباطی"}
+      </h3>
+
+      <div className={styles.inputsSec1}>
         <TextInput
-          title="شماره دانش آموزی"
+          title="شماره دانش‌آموزی"
           name="nationalId"
+          profileData={profileData}
+          setProfileData={setProfileData}
+        />
+        <TextInput
+          title="نام دانش‌آموز"
+          name="studentName"
           profileData={profileData}
           setProfileData={setProfileData}
         />
@@ -84,36 +182,29 @@ function AddProfilePage({ data }) {
           profileData={profileData}
           setProfileData={setProfileData}
         />
-        <TextInput
-          title="نام دانش آموز"
-          name="studentName"
-          profileData={profileData}
-          setProfileData={setProfileData}
-        />
-        <TextInput
-          title="توضیحات"
-          name="description"
-          profileData={profileData}
-          setProfileData={setProfileData}
-          textarea={true}
-        />
+      </div>
 
-        <RadioList profileData={profileData} setProfileData={setProfileData} />
-
+      <h3 className={styles.positive}>موارد تشویقی</h3>
+      <div className={styles.inputsSec3}>
         <TextList
-          title="توضیحات اضافه"
           profileData={profileData}
           setProfileData={setProfileData}
-          type="additionalDescription"
-        />
-        <CustomDatePicker
-          profileData={profileData}
-          setProfileData={setProfileData}
+          type="encouragements"
         />
       </div>
+
+      <h3 className={styles.punishment}>موارد تنبیهی</h3>
+      <div className={styles.inputsSec3}>
+        <TextList
+          profileData={profileData}
+          setProfileData={setProfileData}
+          type="punishments"
+        />
+      </div>
+
       <Toaster />
       {loading ? (
-        <BounceLoader />
+        <Loader />
       ) : data ? (
         <button className={styles.submit} onClick={editHandler}>
           ویرایش مورد انضباطی
@@ -123,7 +214,10 @@ function AddProfilePage({ data }) {
           ثبت مورد انضباطی
         </button>
       )}
-    </div>
+      <button className={styles.pdf} onClick={handleSaveAndDownloadPdf}>
+        ذخیره به صورت PDF
+      </button>
+    </motion.div>
   );
 }
 

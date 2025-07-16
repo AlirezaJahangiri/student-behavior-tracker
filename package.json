@@ -11,6 +11,10 @@
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "formidable": "^3.5.4",
+    "framer-motion": "^12.23.6",
+    "jalali-moment": "^3.3.11",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "mongoose": "^8.16.1",
     "next": "^15.3.4",
     "next-auth": "^4.24.11",
@@ -20,7 +24,8 @@
     "react-icons": "^5.5.0",
     "react-loading-dot": "^1.0.6",
     "react-multi-date-picker": "^4.5.2",
-    "react-spinners": "^0.17.0"
+    "react-spinners": "^0.17.0",
+    "react-transition-group": "^4.4.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

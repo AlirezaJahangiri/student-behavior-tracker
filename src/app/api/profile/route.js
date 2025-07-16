@@ -5,20 +5,14 @@ import connectDB from "@/utils/connectDB";
 import User from "@/models/User";
 import Profile from "@/models/Profile";
 
+// GET: دریافت همه پروفایل‌ها
 export async function GET() {
   try {
     await connectDB();
-
     const profiles = await Profile.find({ published: true }).select("-userId");
-
-    return NextResponse.json(
-      {
-        data: profiles,
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({ data: profiles }, { status: 200 });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return NextResponse.json(
       { error: "مشکلی در سرور رخ داده است" },
       { status: 500 }
@@ -26,6 +20,7 @@ export async function GET() {
   }
 }
 
+// POST: ایجاد پروفایل جدید
 export async function POST(req) {
   try {
     await connectDB();
@@ -33,19 +28,15 @@ export async function POST(req) {
     const {
       classNumber,
       nationalId,
-      description,
       studentName,
-      registeredAt,
-      category,
-      additionalDescription,
+      encouragements = [],
+      punishments = [],
     } = await req.json();
 
     const session = await getServerSession(req);
     if (!session) {
       return NextResponse.json(
-        {
-          error: "لطفا وارد حساب کاربری خود شوید",
-        },
+        { error: "لطفا وارد حساب کاربری خود شوید" },
         { status: 401 }
       );
     }
@@ -58,51 +49,36 @@ export async function POST(req) {
       );
     }
 
-    if (
-      !classNumber ||
-      !nationalId ||
-      !description ||
-      !studentName ||
-      !registeredAt ||
-      !additionalDescription ||
-      !category
-    ) {
+    if (!classNumber || !nationalId || !studentName) {
       return NextResponse.json(
         { error: "لطفا اطلاعات معتبر وارد کنید" },
         { status: 400 }
       );
     }
 
-    const isExist = await Profile.findOne({
-      nationalId,
-      userId: user._id,
-      category,
-    });
-
-    if (isExist) {
-      return NextResponse.json(
-        { error: `مورد ${category} برای این دانش‌آموز قبلاً ثبت شده است` },
-        { status: 400 }
-      );
-    }
+    // فیلتر موارد ناقص
+    const cleanedEncouragements = encouragements.filter(
+      (item) => item?.text?.trim() && item?.date
+    );
+    const cleanedPunishments = punishments.filter(
+      (item) => item?.text?.trim() && item?.date
+    );
 
     const newProfile = await Profile.create({
       classNumber,
       nationalId,
-      description,
       studentName,
-      registeredAt,
-      additionalDescription,
-      category,
+      encouragements: cleanedEncouragements,
+      punishments: cleanedPunishments,
       userId: new Types.ObjectId(user._id),
     });
-    console.log(newProfile);
+
     return NextResponse.json(
       { message: "مورد انضباطی جدید اضافه شد" },
       { status: 201 }
     );
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return NextResponse.json(
       { error: "مشکلی در سرور رخ داده است" },
       { status: 500 }
@@ -110,6 +86,7 @@ export async function POST(req) {
   }
 }
 
+// PATCH: ویرایش پروفایل موجود
 export async function PATCH(req) {
   try {
     await connectDB();
@@ -118,19 +95,15 @@ export async function PATCH(req) {
       _id,
       classNumber,
       nationalId,
-      description,
       studentName,
-      registeredAt,
-      category,
-      additionalDescription,
+      encouragements = [],
+      punishments = [],
     } = await req.json();
 
     const session = await getServerSession(req);
     if (!session) {
       return NextResponse.json(
-        {
-          error: "لطفا وارد حساب کاربری خود شوید",
-        },
+        { error: "لطفا وارد حساب کاربری خود شوید" },
         { status: 401 }
       );
     }
@@ -143,51 +116,46 @@ export async function PATCH(req) {
       );
     }
 
-    if (
-      !_id ||
-      !classNumber ||
-      !nationalId ||
-      !description ||
-      !studentName ||
-      !registeredAt ||
-      !additionalDescription ||
-      !category
-    ) {
+    if (!classNumber || !nationalId || !studentName || !_id) {
       return NextResponse.json(
         { error: "لطفا اطلاعات معتبر وارد کنید" },
         { status: 400 }
       );
     }
 
-    const profile = await Profile.findOne({ _id });
+    const profile = await Profile.findById(_id);
+    if (!profile) {
+      return NextResponse.json({ error: "پروفایل یافت نشد" }, { status: 404 });
+    }
     if (!user._id.equals(profile.userId)) {
       return NextResponse.json(
-        {
-          error: "دسترسی شما به این بخش محدود شده است",
-        },
+        { error: "دسترسی شما محدود شده است" },
         { status: 403 }
       );
     }
 
+    // فیلتر موارد ناقص
+    const cleanedEncouragements = encouragements.filter(
+      (item) => item?.text?.trim() && item?.date
+    );
+    const cleanedPunishments = punishments.filter(
+      (item) => item?.text?.trim() && item?.date
+    );
+
     profile.classNumber = classNumber;
     profile.nationalId = nationalId;
-    profile.description = description;
     profile.studentName = studentName;
-    profile.registeredAt = registeredAt;
-    profile.additionalDescription = additionalDescription;
-    profile.category = category;
-    profile.save();
+    profile.encouragements = cleanedEncouragements;
+    profile.punishments = cleanedPunishments;
+
+    await profile.save();
 
     return NextResponse.json(
-      {
-        message: "مورد انضباطی مورد نظر با موفقیت ویرایش شد",
-      },
-      {
-        status: 200,
-      }
+      { message: "مورد انضباطی با موفقیت ویرایش شد" },
+      { status: 200 }
     );
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return NextResponse.json(
       { error: "مشکلی در سرور رخ داده است" },
       { status: 500 }

@@ -1,5 +1,5 @@
 .container {
-  margin-bottom: 60px;
+  margin-bottom: 18px;
 }
 
 .container p {
@@ -9,7 +9,7 @@
 .container input {
   width: 110px;
   border: 1px #304ffe dashed;
-  color: grey;
+  color: rgb(23, 22, 22);
   border-radius: 5px;
   padding: 10px;
   font-size: 1rem;
