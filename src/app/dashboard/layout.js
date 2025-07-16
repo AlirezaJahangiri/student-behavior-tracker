@@ -6,7 +6,7 @@ import User from "@/models/User";
 import DashboardSidebar from "@/layout/DashboardSidebar";
 
 export const metadata = {
-  title: "پنل کاربری املاک | پروژه بوتواستارت",
+  title: "سامانه ثبت موارد انضباطی",
 };
 
 async function DashboardLayout({ children }) {

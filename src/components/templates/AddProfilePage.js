@@ -132,7 +132,7 @@ function AddProfilePage({ data }) {
 
         <hr />
 
-        <h3>🎉 تشویق‌ ها:</h3>
+        <h3>🎉 تشویقی:</h3>
         {profileData.encouragements?.length > 0 ? (
           profileData.encouragements.map((item, index) => (
             <p key={index}>
@@ -146,7 +146,7 @@ function AddProfilePage({ data }) {
 
         <hr />
 
-        <h3>⚠️ تنبیه‌ ها:</h3>
+        <h3>⚠️ تنبیهی:</h3>
         {profileData.punishments?.length > 0 ? (
           profileData.punishments.map((item, index) => (
             <p key={index}>
@@ -203,20 +203,22 @@ function AddProfilePage({ data }) {
       </div>
 
       <Toaster />
-      {loading ? (
-        <Loader />
-      ) : data ? (
-        <button className={styles.submit} onClick={editHandler}>
-          ویرایش مورد انضباطی
+      <div className={styles.actions}>
+        {loading ? (
+          <Loader />
+        ) : data ? (
+          <button className={styles.submit} onClick={editHandler}>
+            ویرایش مورد انضباطی
+          </button>
+        ) : (
+          <button className={styles.submit} onClick={submitHandler}>
+            ثبت مورد انضباطی
+          </button>
+        )}
+        <button className={styles.pdf} onClick={handleSaveAndDownloadPdf}>
+          ذخیره به صورت PDF
         </button>
-      ) : (
-        <button className={styles.submit} onClick={submitHandler}>
-          ثبت مورد انضباطی
-        </button>
-      )}
-      <button className={styles.pdf} onClick={handleSaveAndDownloadPdf}>
-        ذخیره به صورت PDF
-      </button>
+      </div>
     </motion.div>
   );
 }
