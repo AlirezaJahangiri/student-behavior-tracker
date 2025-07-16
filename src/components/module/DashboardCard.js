@@ -46,8 +46,7 @@ function DashboardCard({ data }) {
         type="text"
         placeholder="جستجو  بر اساس نام  یا  شماره  دانش آموزی"
         value={search}
-        onChange={(e) => setSearch(p2e(e.target.value))} // 👈 تبدیل اعداد فارسی به انگلیسی
-        style={{ padding: "8px", marginBottom: "20px", width: "100%" }}
+        onChange={(e) => setSearch(p2e(e.target.value))}
       />
 
       {filtered.length === 0 && (

@@ -16,30 +16,6 @@ function Header() {
 
   return (
     <header className={styles.header}>
-      {/* آیکون منو (مخصوص موبایل) */}
-      <div className={styles.mobileMenuBtn}>
-        <button
-          className={styles.menuBtn}
-          onClick={toggleMenu}
-          aria-label="باز کردن منو"
-        >
-          {isOpen ? <FiX /> : <FiMenu />}
-        </button>
-      </div>
-
-      {/* لینک‌های منوی دسکتاپ */}
-      <nav className={styles.desktopNav}>
-        <ul>
-          <li>
-            <Link href="/">صفحه اصلی</Link>
-          </li>
-          <li>
-            <Link href="/">درباره ما</Link>
-          </li>
-        </ul>
-      </nav>
-
-      {/* آیکون ورود (نمایش در تمام دستگاه‌ها) */}
       <div className={styles.signin}>
         {data ? (
           <Link
@@ -57,24 +33,6 @@ function Header() {
           </Link>
         )}
       </div>
-
-      {/* منوی کشویی موبایل */}
-      <div className={`${styles.drawer} ${isOpen ? styles.open : ""}`}>
-        <ul>
-          <li>
-            <Link href="/" onClick={() => setIsOpen(false)}>
-              صفحه اصلی
-            </Link>
-          </li>
-          <li>
-            <Link href="/" onClick={() => setIsOpen(false)}>
-              درباره ما
-            </Link>
-          </li>
-        </ul>
-      </div>
-
-      {isOpen && <div className={styles.overlay} onClick={toggleMenu}></div>}
     </header>
   );
 }

@@ -69,11 +69,7 @@ function DashboardSidebar({ children, email, role }) {
           onClick={() => setIsOpen((prev) => !prev)}
           aria-label="Toggle sidebar menu"
         >
-          <span>
-            {" "}
-            <MdOutlineMenuOpen />
-            منو کشویی <MdOutlineMenuOpen />
-          </span>
+          <MdOutlineMenuOpen size={45} />
         </button>
       )}
 

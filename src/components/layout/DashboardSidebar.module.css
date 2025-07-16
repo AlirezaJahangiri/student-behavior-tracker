@@ -117,17 +117,18 @@
     transform: scale(1.02);
   }
 }
-
-/* همبرگر (مخفی در دسکتاپ) */
 .hamburger {
-  display: none;
-  position: fixed;
-  top: 20px;
-  right: 20px;
+  position: absolute;
+  top: 1.2rem;
+  right: 1.1rem;
+  z-index: 1001;
   background: none;
   border: none;
-  z-index: 1001;
   cursor: pointer;
+  color: white;
+  font-size: 1.5rem;
+  /* display: flex;
+  align-items: center; */
 }
 
 /* انیمیشن بستن */

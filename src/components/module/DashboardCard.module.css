@@ -1,4 +1,23 @@
 .searchNotFound {
   font-weight: 600;
   font-size: 1.8rem;
+  margin-top: 1rem;
+}
+
+.container input {
+  padding: 1rem;
+  width: 100%;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: black;
+  font-weight: 400;
+}
+
+@media (max-width: 450px) {
+  .container input {
+    font-size: 0.8rem;
+  }
 }
