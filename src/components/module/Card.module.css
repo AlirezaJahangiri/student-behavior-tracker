@@ -1,49 +1,52 @@
-.container {
+.card {
+  background-color: #526d82;
+  border-radius: 20px;
+  padding: 18px 24px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 0.5rem;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  margin: 1rem 0;
-  padding: 1rem;
-  border-radius: 8px;
-  border: 1px solid #179cde;
-}
-
-.sec1,
-.sec2 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.sec1 div,
-.sec2 div {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.studentName,
-.classNumber {
-  font-weight: 500;
-}
-
-.positive {
-  background-color: #10b981;
   color: white;
-  padding: 0.5rem;
-  border-radius: 8px;
+  margin: 1.3rem 0;
 }
 
-.punishment {
-  background-color: #ef4444;
-  color: white;
-  padding: 0.5rem;
-  border-radius: 8px;
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 24px rgba(44, 123, 229, 0.25);
 }
 
-.img {
-  width: 32px;
+.delete {
+  background: none;
   border: none;
+  font-size: 1.2rem;
+  color: #e6f0fb;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.delete:hover {
+  color: #ef4444;
+  transform: scale(1.2);
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info h3 {
+  font-weight: 400;
+}
+
+@media (max-width: 811px) {
+  .info {
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+  }
+  .delete {
+    align-self: flex-end;
+  }
 }

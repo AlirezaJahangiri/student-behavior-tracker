@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Toaster, toast } from "react-hot-toast";
 import TextInput from "@/module/TextInput";
 import TextList from "@/module/TextList";
-import CustomDatePicker from "@/module/CustomDatePicker";
 import styles from "@/templates/AddProfilePage.module.css";
 import Loader from "@/module/Loader";
 import { generatePdf } from "@/utils/pdfGenerator";
@@ -43,7 +42,7 @@ function AddProfilePage({ data }) {
       router.refresh();
       setTimeout(() => {
         router.push("/dashboard/my-profiles");
-      }, 1000);
+      }, 500);
     }
   };
 
@@ -63,7 +62,7 @@ function AddProfilePage({ data }) {
       router.refresh();
       setTimeout(() => {
         router.push("/dashboard/my-profiles");
-      }, 1000);
+      }, 500);
     }
   };
 
@@ -90,7 +89,7 @@ function AddProfilePage({ data }) {
       setTimeout(() => {
         router.refresh();
         router.push("/dashboard/my-profiles");
-      }, 1000);
+      }, 500);
     }
   };
 

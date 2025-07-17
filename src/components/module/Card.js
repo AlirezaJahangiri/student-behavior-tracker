@@ -1,53 +1,35 @@
-import Link from "next/link";
-import moment from "jalali-moment";
 import styles from "./Card.module.css";
+import { FiTrash2 } from "react-icons/fi";
 import { motion } from "framer-motion";
 
-function Card({
-  data: { _id, category, studentName, registeredAt, classNumber, nationalId },
-  onEdit,
-  onDelete,
-}) {
+function Card({ data, onEdit, onDelete }) {
+  const { _id, studentName, classNumber, nationalId } = data;
+
   return (
     <motion.div
-      className={styles.container}
+      onClick={onEdit}
+      className={styles.card}
       layout
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.3 }}
     >
-      <div className={styles.sec1}>
-        <div>
-          🆔 <span>{nationalId}</span>
-        </div>
-        <div>
-          👨🏻‍🎓 <span className={styles.studentName}>{studentName}</span>
-        </div>
-        <div className={styles.actions}>
-          <button onClick={onEdit}>
-            <img className={styles.img} src="/images/edit.png" alt="edit" />
-          </button>
-          <button onClick={onDelete}>
-            <img className={styles.img} src="/images/delete.svg" alt="delete" />
-          </button>
-        </div>
-      </div>
-      <div className={styles.sec2}>
-        <div>
-          #️⃣ <span className={styles.classNumber}>{classNumber}</span>
-        </div>
-        <div>
-          {category === "تنبیهی" ? (
-            <span className={styles.punishment}>تنبیهی</span>
-          ) : (
-            <span className={styles.positive}>تشویقی</span>
-          )}
-        </div>
-        <div>
-          🕣{" "}
-          <span>{moment(registeredAt).locale("fa").format("YYYY/MM/DD")}</span>
-        </div>
+      <div className={styles.info}>
+        <span className={styles.nationalId}>
+          شماره دانش آموزی : {nationalId}
+        </span>
+        <h3>{studentName}</h3>
+        <span>شماره کلاس : {classNumber}</span>
+        <button
+          className={styles.delete}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+        >
+          <FiTrash2 />
+        </button>
       </div>
     </motion.div>
   );
