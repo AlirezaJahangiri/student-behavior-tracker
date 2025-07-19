@@ -5,18 +5,16 @@ import { useRouter } from "next/navigation";
 import { Toaster, toast } from "react-hot-toast";
 import TextInput from "@/module/TextInput";
 import TextList from "@/module/TextList";
-import styles from "@/templates/AddProfilePage.module.css";
+import styles from "@/templates/AddTeacherPage.module.css";
 import Loader from "@/module/Loader";
-import { generatePdf } from "@/utils/pdfGenerator";
+import { generatePdfT } from "@/utils/pdfGeneratorT";
 import { motion } from "framer-motion";
 
-function AddProfilePage({ data }) {
+function AddTeacherPage({ data }) {
   const [profileData, setProfileData] = useState({
-    classNumber: "",
     nationalId: "",
-    studentName: "",
-    encouragements: [],
-    punishments: [],
+    teacherName: "",
+    descriptions: [],
   });
   const [loading, setLoading] = useState(false);
 
@@ -28,7 +26,7 @@ function AddProfilePage({ data }) {
 
   const submitHandler = async () => {
     setLoading(true);
-    const res = await fetch("/api/profile", {
+    const res = await fetch("/api/report", {
       method: "POST",
       body: JSON.stringify(profileData),
       headers: { "Content-Type": "application/json" },
@@ -41,14 +39,14 @@ function AddProfilePage({ data }) {
       toast.success(data.message);
       router.refresh();
       setTimeout(() => {
-        router.push("/dashboard/my-profiles");
+        router.push("/dashboard/teachers");
       }, 500);
     }
   };
 
   const editHandler = async () => {
     setLoading(true);
-    const res = await fetch("/api/profile", {
+    const res = await fetch("/api/report", {
       method: "PATCH",
       body: JSON.stringify(profileData),
       headers: { "Content-Type": "application/json" },
@@ -61,7 +59,7 @@ function AddProfilePage({ data }) {
       toast.success(data.message);
       router.refresh();
       setTimeout(() => {
-        router.push("/dashboard/my-profiles");
+        router.push("/dashboard/teachers");
       }, 500);
     }
   };
@@ -69,7 +67,7 @@ function AddProfilePage({ data }) {
   const handleSaveAndDownloadPdf = async () => {
     setLoading(true);
 
-    const response = await fetch("/api/profile", {
+    const response = await fetch("/api/report", {
       method: data ? "PATCH" : "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(profileData),
@@ -86,12 +84,12 @@ function AddProfilePage({ data }) {
     toast.success(result.message);
 
     // 📌 اینجا بعد از ذخیره موفق، PDF بساز
-    await generatePdf(profileData);
+    await generatePdfT(profileData);
 
     if (!data) {
       setTimeout(() => {
         router.refresh();
-        router.push("/dashboard/my-profiles");
+        router.push("/dashboard/teachers");
       }, 500);
     }
   };
@@ -120,23 +118,20 @@ function AddProfilePage({ data }) {
           lineHeight: "2",
         }}
       >
-        <h2 style={{ textAlign: "center" }}>📝 گزارش انضباطی دانش‌آموز</h2>
+        <h2 style={{ textAlign: "center" }}>📝 گزارش کار دبیر</h2>
 
         <p>
-          <strong>👤 نام دانش‌آموز:</strong> {profileData.studentName || "-"}
+          <strong>👤 نام دبیر:</strong> {profileData.teacherName || "-"}
         </p>
         <p>
-          <strong>🆔 کد دانش‌آموزی:</strong> {profileData.nationalId || "-"}
-        </p>
-        <p>
-          <strong>🏫 کلاس:</strong> {profileData.classNumber || "-"}
+          <strong>🆔 کد ملی:</strong> {profileData.nationalId || "-"}
         </p>
 
         <hr />
 
-        <h3>🎉 تشویقی:</h3>
-        {profileData.encouragements?.length > 0 ? (
-          profileData.encouragements.map((item, index) => (
+        <h3>✅ موارد ذکر شده:</h3>
+        {profileData.descriptions?.length > 0 ? (
+          profileData.descriptions.map((item, index) => (
             <p key={index}>
               {index + 1}️⃣ - {new Date(item.date).toLocaleDateString("fa-IR")}{" "}
               - {item.text || "-"}
@@ -147,60 +142,33 @@ function AddProfilePage({ data }) {
         )}
 
         <hr />
-
-        <h3>⚠️ تنبیهی:</h3>
-        {profileData.punishments?.length > 0 ? (
-          profileData.punishments.map((item, index) => (
-            <p key={index}>
-              {index + 1}️⃣ - {new Date(item.date).toLocaleDateString("fa-IR")}{" "}
-              - {item.text || "-"}
-            </p>
-          ))
-        ) : (
-          <p>موردی ثبت نشده است</p>
-        )}
       </div>
 
       <h3 className={styles.title}>
-        {data ? "ویرایش مورد انضباطی" : "ثبت مورد انضباطی"}
+        {data ? "ویرایش مورد دبیر" : "ثبت مورد دبیر"}
       </h3>
 
       <div className={styles.inputsSec1}>
         <TextInput
-          title="شماره دانش‌آموزی"
+          title="کد ملی دبیر"
           name="nationalId"
           profileData={profileData}
           setProfileData={setProfileData}
         />
         <TextInput
-          title="نام دانش‌آموز"
-          name="studentName"
-          profileData={profileData}
-          setProfileData={setProfileData}
-        />
-        <TextInput
-          title="شماره کلاس"
-          name="classNumber"
+          title="نام دبیر"
+          name="teacherName"
           profileData={profileData}
           setProfileData={setProfileData}
         />
       </div>
 
-      <h3 className={styles.positive}>موارد تشویقی</h3>
+      <h3 className={styles.alert}>موارد قابل ذکر</h3>
       <div className={styles.inputsSec3}>
         <TextList
           profileData={profileData}
           setProfileData={setProfileData}
-          type="encouragements"
-        />
-      </div>
-
-      <h3 className={styles.punishment}>موارد تنبیهی</h3>
-      <div className={styles.inputsSec3}>
-        <TextList
-          profileData={profileData}
-          setProfileData={setProfileData}
-          type="punishments"
+          type="descriptions"
         />
       </div>
 
@@ -210,11 +178,11 @@ function AddProfilePage({ data }) {
           <Loader />
         ) : data ? (
           <button className={styles.submit} onClick={editHandler}>
-            ویرایش مورد انضباطی
+            ویرایش
           </button>
         ) : (
           <button className={styles.submit} onClick={submitHandler}>
-            ثبت مورد انضباطی
+            ثبت
           </button>
         )}
         <button className={styles.pdf} onClick={handleSaveAndDownloadPdf}>
@@ -225,4 +193,4 @@ function AddProfilePage({ data }) {
   );
 }
 
-export default AddProfilePage;
+export default AddTeacherPage;

@@ -1,14 +1,41 @@
+import connectDB from "@/utils/connectDB";
 import Profile from "@/models/Profile";
 import AddProfilePage from "@/templates/AddProfilePage";
-import connectDB from "@/utils/connectDB";
 
-async function Edit({ params: { profileId } }) {
+export default async function Edit({ params }) {
   await connectDB();
-  const profile = await Profile.findOne({ _id: profileId });
 
-  if (!profile) return <h3>مشکلی پیش آمده است. لطفا دوباره امتحان کنید ...</h3>;
+  const { profileId } = await params;
 
-  return <AddProfilePage data={JSON.parse(JSON.stringify(profile))} />;
+  // اگر profileId نبود، ارور برگردون
+  if (!profileId) {
+    return <h3>شناسه پروفایل نامعتبر است</h3>;
+  }
+
+  const profile = await Profile.findById(profileId).lean();
+
+  if (!profile) {
+    return <h3>موردی یافت نشد</h3>;
+  }
+
+  // پاکسازی فیلدهای غیرقابل‌ارسال به کلاینت
+  const safeProfile = {
+    ...profile,
+    _id: profile._id.toString(),
+    userId: profile.userId.toString(),
+    createdAt: new Date(profile.createdAt).toISOString(),
+    updatedAt: new Date(profile.updatedAt).toISOString(),
+    encouragements: profile.encouragements.map((item) => ({
+      ...item,
+      _id: item._id.toString?.() || "",
+      date: new Date(item.date).toISOString(),
+    })),
+    punishments: profile.punishments.map((item) => ({
+      ...item,
+      _id: item._id.toString?.() || "",
+      date: new Date(item.date).toISOString(),
+    })),
+  };
+
+  return <AddProfilePage data={safeProfile} />;
 }
-
-export default Edit;

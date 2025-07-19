@@ -26,6 +26,18 @@ async function Myprofiles() {
     userId: profile.userId.toString(),
     createdAt: new Date(profile.createdAt).toISOString(),
     updatedAt: new Date(profile.updatedAt).toISOString(),
+    encouragements:
+      profile.encouragements?.map((item) => ({
+        ...item,
+        _id: item._id.toString(),
+        date: item.date?.toISOString?.(),
+      })) || [],
+    punishments:
+      profile.punishments?.map((item) => ({
+        ...item,
+        _id: item._id.toString(),
+        date: item.date?.toISOString?.(),
+      })) || [],
   }));
 
   return <MyProfilesPage profiles={plainProfiles} />;

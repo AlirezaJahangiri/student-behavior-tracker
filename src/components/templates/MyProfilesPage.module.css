@@ -5,3 +5,29 @@
   padding: 10px 15px;
   border-radius: 10px;
 }
+
+.btnTeacher {
+  border: none;
+  padding: 0.8rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  background-color: #fe7f2d;
+  color: white;
+  transition: all ease-in 0.3s;
+  font-weight: 400;
+}
+
+@media (max-width:430px) {
+  .btnTeacher {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+}
+
+.btnTeacher:hover {
+  background-color: white;
+  color: #fe7f2d;
+  border: 1px solid #fe7f2d;
+}

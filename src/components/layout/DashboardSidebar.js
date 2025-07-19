@@ -109,6 +109,16 @@ function DashboardSidebar({ children, email, role }) {
           <span>ثبت مورد انضباطی</span>
         </Link>
 
+        <Link
+          href="/dashboard/teachers"
+          className={
+            isActive("/dashboard/teachers") ? styles.active : ""
+          }
+          onClick={onLinkClick}
+        >
+          <span>پنل معلمان</span>
+        </Link>
+
         {role === "ADMIN" && (
           <Link
             href="/admin"
