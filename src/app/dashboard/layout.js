@@ -7,7 +7,7 @@ import DashboardSidebar from "@/layout/DashboardSidebar";
 import LogoutButton from "@/module/LogoutButton";
 
 export const metadata = {
-  title: "سامانه ثبت موارد انضباطی",
+  title: "سامانه جامع نظم دهی",
 };
 
 async function DashboardLayout({ children }) {
