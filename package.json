@@ -1,5 +1,5 @@
 {
-  "name": "moshavere-amlak",
+  "name": "student-behavior-tracker",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.4",
     "bcryptjs": "^3.0.2",
     "formidable": "^3.5.4",
     "framer-motion": "^12.23.6",

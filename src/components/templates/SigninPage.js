@@ -9,12 +9,14 @@ import { motion } from "framer-motion";
 import styles from "@/templates/SignupPage.module.css";
 import Loader from "@/module/Loader";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import ContactModal from "@/module/ContactModal";
 
 function SigninPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const router = useRouter();
 
@@ -115,16 +117,17 @@ function SigninPage() {
         )}
       </motion.form>
 
-      <motion.p
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
       >
         حساب کاربری ندارید؟{" "}
-        <Link href="/signup" className={styles.link}>
-          ثبت نام
+        <Link href="#" onClick={() => setOpen(true)} className={styles.link}>
+          تماس بگیرید
         </Link>
-      </motion.p>
+        <ContactModal isOpen={open} onClose={() => setOpen(false)} />
+      </motion.div>
 
       <Toaster />
     </motion.div>

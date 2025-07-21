@@ -6,7 +6,10 @@ import styles from "@/module/LogoutButton.module.css";
 
 function LogoutButton() {
   return (
-    <button className={styles.button} onClick={signOut}>
+    <button
+      className={styles.button}
+      onClick={() => signOut({ callbackUrl: "/signin" })}
+    >
       <FiLogOut />
       خروج
     </button>

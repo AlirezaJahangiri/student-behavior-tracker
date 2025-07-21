@@ -14,7 +14,10 @@ export const generatePdfT = async (profileData) => {
   const element = document.getElementById("pdf-content");
   if (!element) return;
 
-  const canvas = await html2canvas(element, { useCORS: true });
+  const canvas = await html2canvas(element, {
+    useCORS: true,
+    scale: 7,
+  });
   const imgData = canvas.toDataURL("image/png");
 
   const pdf = new jsPDF("p", "mm", "a4");
@@ -23,7 +26,8 @@ export const generatePdfT = async (profileData) => {
   const imgProps = pdf.getImageProperties(imgData);
   const height = (imgProps.height * width) / imgProps.width;
 
-  pdf.addImage(imgData, "PNG", 0, 0, width, height);
+  pdf.addImage(imgData, "JPEG", 0, 0, width, height, undefined, "FAST");
+
   const teacherName =
     profileData.teacherName?.replace(/\s+/g, "_") || "teacher";
   const nationalId = profileData.nationalId || "no-id";
