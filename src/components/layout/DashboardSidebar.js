@@ -4,7 +4,8 @@ import Link from "next/link";
 import LogoutButton from "@/module/LogoutButton";
 import styles from "@/layout/DashboardSidebar.module.css";
 import { usePathname } from "next/navigation";
-import { IoMdSchool } from "react-icons/io";
+import { FaSchool } from "react-icons/fa";
+
 import { GiHamburgerMenu } from "react-icons/gi";
 
 import { useState, useEffect, useRef } from "react";
@@ -80,7 +81,7 @@ function DashboardSidebar({ children, schoolName, role }) {
           isMobile && isOpen ? styles.open : ""
         } ${isMobile && isAnimatingClose ? styles.close : ""}`}
       >
-        <IoMdSchool size={40} />
+        <FaSchool size={40} />
         {role === "ADMIN" ? "ادمین" : null}
         <p>{schoolName}</p>
         <span className={styles.seperator}></span>

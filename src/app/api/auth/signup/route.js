@@ -5,6 +5,13 @@ import { hashPassword } from "@/utils/auth";
 
 export async function POST(req) {
   try {
+    const authHeader = req.headers.get("authorization");
+    const token = authHeader?.split(" ")[1];
+
+    if (token !== process.env.ADMIN_SECRET) {
+      return NextResponse.json({ error: "دسترسی غیرمجاز" }, { status: 401 });
+    }
+
     await connectDB();
 
     const { email, password, schoolName } = await req.json();
