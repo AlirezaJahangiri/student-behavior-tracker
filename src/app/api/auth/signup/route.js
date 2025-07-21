@@ -7,10 +7,9 @@ export async function POST(req) {
   try {
     await connectDB();
 
-    const { email, password } = await req.json();
-    console.log({ email, password });
+    const { email, password, schoolName } = await req.json();
 
-    if (!email || !password) {
+    if (!email || !password || !schoolName) {
       return NextResponse.json(
         { error: "لطفا اطلاعات معتبر وارد کنید" },
         { status: 422 }
@@ -32,8 +31,8 @@ export async function POST(req) {
     const newUser = await User.create({
       email: email,
       password: hashedPassword,
+      schoolName,
     });
-    console.log(newUser);
 
     return NextResponse.json(
       { message: "حساب کاربری ایجاد شد" },

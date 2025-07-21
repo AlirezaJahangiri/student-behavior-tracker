@@ -27,7 +27,7 @@ export default function ContactModal({ isOpen, onClose }) {
   return (
     <div className={styles.overlay}>
       <div className={styles.modal} ref={modalRef}>
-        <h3>اطلاعات تماس</h3>
+        <h3>اطلاعات تماس : علیرضا جهانگیری</h3>
         <p>
           آیدی تلگرام:{" "}
           <a href="https://t.me/AlirezaJhg" target="_blank">

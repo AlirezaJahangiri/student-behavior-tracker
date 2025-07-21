@@ -32,13 +32,16 @@ async function DashboardLayout({ children }) {
           fontSize: "1.2rem",
         }}
       >
-        <p style={{ fontWeight: "600" }}>مشکلی پیش امده است...</p>
+        <p style={{ fontWeight: "600" }}>
+          {" "}
+          مشکلی پیش آمده است با ادمین تماس حاصل فرمایید...{" "}
+        </p>
         <LogoutButton />
       </div>
     );
 
   return (
-    <DashboardSidebar role={user.role} email={user.email}>
+    <DashboardSidebar role={user.role} schoolName={user.schoolName}>
       {children}
     </DashboardSidebar>
   );

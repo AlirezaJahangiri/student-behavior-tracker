@@ -9,7 +9,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 
 import { useState, useEffect, useRef } from "react";
 
-function DashboardSidebar({ children, email, role }) {
+function DashboardSidebar({ children, schoolName, role }) {
   const pathname = usePathname();
   const isActive = (path) => pathname === path;
 
@@ -82,7 +82,7 @@ function DashboardSidebar({ children, email, role }) {
       >
         <IoMdSchool size={40} />
         {role === "ADMIN" ? "ادمین" : null}
-        <p>{email}</p>
+        <p>{schoolName}</p>
         <span className={styles.seperator}></span>
 
         <Link
@@ -111,9 +111,7 @@ function DashboardSidebar({ children, email, role }) {
 
         <Link
           href="/dashboard/teachers"
-          className={
-            isActive("/dashboard/teachers") ? styles.active : ""
-          }
+          className={isActive("/dashboard/teachers") ? styles.active : ""}
           onClick={onLinkClick}
         >
           <span>پنل معلمان</span>
