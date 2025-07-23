@@ -7,7 +7,7 @@ import DashboardSidebar from "@/layout/DashboardSidebar";
 import LogoutButton from "@/module/LogoutButton";
 
 export const metadata = {
-  title: "سامانه جامع نظم دهی",
+  title: "سامانه یکپارچه نظم دهی مدارس",
 };
 
 async function DashboardLayout({ children }) {

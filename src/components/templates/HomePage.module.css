@@ -1,0 +1,147 @@
+.main {
+  background-color: #f9fafb;
+  padding: 2rem;
+}
+
+.sec {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.banner img {
+  width: 500px;
+  height: 500px;
+}
+
+.hero {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: black;
+  border-radius: 1rem;
+  margin-bottom: 3rem;
+}
+
+.hero h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-weight: 200;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.cta {
+  background: white;
+  color: #4f46e5;
+  padding: 0.7rem 1.5rem;
+  border-radius: 999px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.cta:hover {
+  background: #e0e7ff;
+}
+
+.features {
+  text-align: center;
+}
+
+.features h2 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.featureList {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.featureItem {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px #ddd;
+  transition: transform 0.3s ease;
+}
+
+.featureItem:hover {
+  transform: translateY(-5px);
+}
+
+.btn {
+  background-color: #3b82f6;
+  color: #ffffff;
+  padding: 0.85rem 2.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.btn:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.ctaa {
+  margin-top: 2rem;
+}
+
+@media (max-width: 600px) {
+  .banner img {
+    width: 350px;
+    height: 350px;
+  }
+
+  .hero h1 {
+    font-size: 1.4rem;
+    margin-bottom: 0.6rem;
+  }
+}
+
+.featureItem {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.featureItem:hover {
+  transform: translateY(-5px);
+}
+
+.icon {
+  font-size: 2.1rem;
+  color: #3b82f6;
+  margin-bottom: 0.6rem;
+}
+
+.featureItem h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.featureItem p {
+  font-weight: 200;
+  margin-top: 0.6rem;
+}

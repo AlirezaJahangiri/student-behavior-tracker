@@ -87,6 +87,14 @@ function DashboardSidebar({ children, schoolName, role }) {
         <span className={styles.seperator}></span>
 
         <Link
+          href="/"
+          className={isActive("/dashboard/add") ? styles.active : ""}
+          onClick={onLinkClick}
+        >
+          <span>صفحه اصلی</span>
+        </Link>
+
+        <Link
           href="/dashboard"
           className={isActive("/dashboard") ? styles.active : ""}
           onClick={onLinkClick}

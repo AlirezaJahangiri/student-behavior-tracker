@@ -10,7 +10,7 @@
   gap: 1rem;
 }
 
-.title span {
+.title a {
   color: #f9fafb;
   font-weight: 400;
   font-size: 1.1rem;
@@ -53,7 +53,7 @@
   .header {
     padding: 0.4rem;
   }
-  .title span {
+  .title a {
     display: none;
   }
 }

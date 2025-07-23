@@ -70,6 +70,7 @@
   color: #2aabee;
   margin-right: 10px;
   border-bottom: 2px solid grey;
+  font-weight: 600;
 }
 
 @media (max-width: 500px) {

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import styles from "./Header.module.css";
 import { CiLogin } from "react-icons/ci";
-import { FiMenu, FiX } from "react-icons/fi";
 import { useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { useSession } from "next-auth/react";
@@ -17,7 +16,7 @@ function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.title}>
-        <span>سامانه جامع نظم دهی</span>
+        <Link href="/">سامانه یکپارچه نظم دهی مدارس</Link>
       </div>
       <div className={styles.signin}>
         {data ? (
