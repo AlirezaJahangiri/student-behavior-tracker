@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏫 سامانه یکپارچه نظم‌دهی مدارس (School Discipline Management System)
 
-## Getting Started
+یک پلتفرم تحت وب برای مدیریت، ثبت و بررسی موارد انضباطی دانش‌آموزان در مدارس، با قابلیت تفکیک نقش‌ها (مدیر، معلم، ناظم) و طراحی ریسپانسیو.
 
-First, run the development server:
+## ✨ امکانات کلیدی
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- 🎓 ثبت و مشاهده موارد انضباطی دانش‌آموزان
+- 👩‍🏫 پنل اختصاصی برای معلمان و مدیران مدارس
+- 🧑‍💼 سطح دسترسی مبتنی بر نقش (RBAC)
+- 📊 گزارش‌گیری و آمارهای کلی و جزئی
+- 🌐 طراحی ریسپانسیو (موبایل‌فرندلی)
+- 🔐 امنیت و احراز هویت کاربران
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠 تکنولوژی‌های استفاده شده
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+| بخش | تکنولوژی |
+|-----|----------|
+| فرانت‌اند | Next.js 14, React, CSS Modules |
+| انیمیشن‌ها | Framer Motion |
+| مدیریت وضعیت | React Hooks, Context API |
+| آیکون‌ها | React Icons |
+| احراز هویت | JWT / API-based |
+| دیتابیس | PostgreSQL (پیشنهادی) |
+| بک‌اند (پیشنهادی) | Next.js API Routes / Nest.js |
+| استایل | CSS Modules + Custom Design |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
