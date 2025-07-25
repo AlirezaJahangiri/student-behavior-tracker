@@ -133,8 +133,8 @@ function AddTeacherPage({ data }) {
         {profileData.descriptions?.length > 0 ? (
           profileData.descriptions.map((item, index) => (
             <p key={index}>
-              {index + 1}️⃣ - {new Date(item.date).toLocaleDateString("fa-IR")}{" "}
-              - {item.text || "-"}
+              {index + 1} - {new Date(item.date).toLocaleDateString("fa-IR")} -{" "}
+              {item.text || "-"}
             </p>
           ))
         ) : (

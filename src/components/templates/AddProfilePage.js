@@ -138,8 +138,8 @@ function AddProfilePage({ data }) {
         {profileData.encouragements?.length > 0 ? (
           profileData.encouragements.map((item, index) => (
             <p key={index}>
-              {index + 1}️⃣ - {new Date(item.date).toLocaleDateString("fa-IR")}{" "}
-              - {item.text || "-"}
+              {index + 1} - {new Date(item.date).toLocaleDateString("fa-IR")} -{" "}
+              {item.text || "-"}
             </p>
           ))
         ) : (
@@ -152,8 +152,8 @@ function AddProfilePage({ data }) {
         {profileData.punishments?.length > 0 ? (
           profileData.punishments.map((item, index) => (
             <p key={index}>
-              {index + 1}️⃣ - {new Date(item.date).toLocaleDateString("fa-IR")}{" "}
-              - {item.text || "-"}
+              {index + 1} - {new Date(item.date).toLocaleDateString("fa-IR")} -{" "}
+              {item.text || "-"}
             </p>
           ))
         ) : (

@@ -71,7 +71,7 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      <section className={styles.features}>
+      <section id="features" className={styles.features}>
         <h2>قابلیت‌ ها</h2>
         <div className={styles.featureList}>
           {features.map((item, i) => (
@@ -80,7 +80,7 @@ export default function HomePage() {
               className={styles.featureItem}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.2 }}
+              transition={{ duration: 0.01, delay: i * 0.2 }}
               viewport={{ once: true }}
             >
               <motion.div

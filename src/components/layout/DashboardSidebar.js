@@ -74,7 +74,6 @@ function DashboardSidebar({ children, schoolName, role }) {
         </button>
       )}
 
-      {/* سایدبار */}
       <div
         ref={sidebarRef}
         className={`${styles.sidebar} ${
@@ -88,7 +87,7 @@ function DashboardSidebar({ children, schoolName, role }) {
 
         <Link
           href="/"
-          className={isActive("/dashboard/add") ? styles.active : ""}
+          className={isActive("/") ? styles.active : ""}
           onClick={onLinkClick}
         >
           <span>صفحه اصلی</span>

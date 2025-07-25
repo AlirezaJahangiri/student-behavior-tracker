@@ -32,7 +32,7 @@ function SigninPage() {
     if (res.error) {
       toast.error(res.error);
     } else {
-      router.push("/");
+      router.replace("/");
     }
   };
 
@@ -61,7 +61,7 @@ function SigninPage() {
       >
         <motion.input
           type="text"
-          placeholder="Username"
+          placeholder="نام کاربری"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           variants={{
@@ -79,7 +79,7 @@ function SigninPage() {
         >
           <input
             type={showPassword ? "text" : "password"}
-            placeholder="Password"
+            placeholder="گذرواژه"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -123,7 +123,7 @@ function SigninPage() {
         transition={{ delay: 0.6 }}
       >
         حساب کاربری ندارید؟{" "}
-        <Link href="#" onClick={() => setOpen(true)} className={styles.link}>
+        <Link href="" onClick={() => setOpen(true)} className={styles.link}>
           تماس بگیرید
         </Link>
         <ContactModal isOpen={open} onClose={() => setOpen(false)} />

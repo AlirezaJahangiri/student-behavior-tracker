@@ -12,6 +12,7 @@ body {
   overflow-x: hidden;
   margin: auto;
   padding: 0 10px;
+  scroll-behavior: smooth;
 }
 
 a {
