@@ -13,15 +13,16 @@
 
 ## 🛠 تکنولوژی‌های استفاده شده
 
-| بخش          | تکنولوژی                       |
-| ------------ | ------------------------------ | --------- |
-| فرانت‌اند    | Next.js 14, React, CSS Modules |
-| انیمیشن‌ها   | Framer Motion                  |
-| مدیریت وضعیت | React Hooks, Context API       |
-| آیکون‌ها     | React Icons                    |
-| احراز هویت   | JWT / API-based                | Next-auth |
-| دیتابیس      | MongoDb                        |
-| بک‌اند       | Next.js API Routes / Next.js   |
-| استایل       | CSS Modules + Custom Design    |
+| بخش | تکنولوژی |
+|-----|----------|
+| فرانت‌اند | Next.js 14, React, CSS Modules |
+| انیمیشن‌ها | Framer Motion |
+| مدیریت وضعیت | React Hooks, Context API |
+| آیکون‌ها | React Icons |
+| احراز هویت | JWT / API-based | Next-auth
+| دیتابیس | MongoDb 
+| بک‌اند  | Next.js API Routes / Next.js |
+| استایل | CSS Modules + Custom Design |
 
 ---
+
