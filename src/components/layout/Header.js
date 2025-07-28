@@ -12,7 +12,7 @@ function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
-
+  
   return (
     <header className={styles.header}>
       <div className={styles.title}>

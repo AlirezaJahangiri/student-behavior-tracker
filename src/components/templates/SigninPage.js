@@ -33,6 +33,7 @@ function SigninPage() {
       toast.error(res.error);
     } else {
       router.replace("/");
+      router.refresh();
     }
   };
 

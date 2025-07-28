@@ -4,6 +4,8 @@
 import { motion } from "framer-motion";
 import styles from "./HomePage.module.css";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+
 import {
   FaRegClipboard,
   FaChartBar,
@@ -19,6 +21,8 @@ import {
 } from "react-icons/fa";
 
 export default function HomePage() {
+  const { data } = useSession();
+
   return (
     <main className={styles.main}>
       <section className={styles.hero}>
@@ -64,7 +68,7 @@ export default function HomePage() {
               className={styles.ctaa}
             >
               <Link href="/dashboard" className={styles.btn}>
-                ورود به پنل کاربری
+                {data ? "داشبورد" : "ورود به سامانه"}
               </Link>
             </motion.div>
           </motion.div>

@@ -30,7 +30,7 @@ export const generatePdfT = async (profileData) => {
 
   const teacherName =
     profileData.teacherName?.replace(/\s+/g, "_") || "teacher";
-  const nationalId = profileData.nationalId || "no-id";
+  const fatherName = profileData.fatherName || "no-id";
 
-  pdf.save(`${teacherName}_${nationalId}گزارش_کار.pdf`);
+  pdf.save(`${teacherName}_${fatherName} _ گزارش_کار.pdf`);
 };

@@ -3,7 +3,7 @@ import { FiTrash2 } from "react-icons/fi";
 import { motion } from "framer-motion";
 
 function CardT({ data, onEdit, onDelete }) {
-  const { _id, teacherName, nationalId } = data;
+  const { _id, teacherName, fatherName } = data;
 
   return (
     <motion.div
@@ -16,8 +16,8 @@ function CardT({ data, onEdit, onDelete }) {
       transition={{ duration: 0.3 }}
     >
       <div className={styles.info}>
-        <span className={styles.nationalId}>کدملی : {nationalId}</span>
         <h3>{teacherName}</h3>
+        <span className={styles.fatherName}>نام پدر : {fatherName}</span>
         <button
           className={styles.delete}
           onClick={(e) => {

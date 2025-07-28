@@ -14,10 +14,7 @@ function DashboardCardT({ data }) {
   const filtered = Array.isArray(data)
     ? data.filter((teacher) => {
         const keyword = search.toLowerCase();
-        return (
-          teacher.teacherName.toLowerCase().includes(keyword) ||
-          teacher.nationalId.toLowerCase().includes(keyword)
-        );
+        return teacher.teacherName.toLowerCase().includes(keyword);
       })
     : [];
 
@@ -42,7 +39,7 @@ function DashboardCardT({ data }) {
     <div className={styles.container}>
       <input
         type="text"
-        placeholder="جستجو بر اساس نام و یا کد ملی دبیر"
+        placeholder="جستجو بر اساس نام دبیر"
         value={search}
         onChange={(e) => setSearch(p2e(e.target.value))}
       />

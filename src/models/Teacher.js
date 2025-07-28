@@ -2,13 +2,19 @@ import { Schema, model, models } from "mongoose";
 
 const TeacherSchema = new Schema(
   {
-    nationalId: {
+    fatherName: {
       type: String,
       required: true,
     },
     teacherName: {
       type: String,
       required: true,
+    },
+
+    normalizedKey: {
+      type: String,
+      required: true,
+      index: true,
     },
 
     descriptions: {

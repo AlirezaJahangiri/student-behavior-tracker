@@ -1,16 +1,43 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { Types } from "mongoose";
+import crypto from "crypto";
+
 import connectDB from "@/utils/connectDB";
 import User from "@/models/User";
 import Teacher from "@/models/Teacher";
+import { encryptData, decryptData } from "@/utils/encrypt";
 
-// GET: دریافت همه پروفایل‌های منتشر شده
+// نرمال‌سازی ورودی (حذف فاصله‌ها و تبدیل به حروف کوچک)
+function normalize(input) {
+  return input?.trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+// هش کردن کلید نرمال‌شده
+function hashKey(input) {
+  return crypto.createHash("sha256").update(input).digest("hex");
+}
+
 export async function GET() {
   try {
     await connectDB();
-    const Teachers = await Teacher.find({ published: true }).select("-userId");
-    return NextResponse.json({ data: Teachers }, { status: 200 });
+    const teachers = await Teacher.find({ published: true }).select("-userId");
+
+    const decryptedTeachers = teachers.map((teacher) => {
+      const plain = teacher.toObject();
+      return {
+        ...plain,
+        teacherName: decryptData(plain.teacherName),
+        fatherName: decryptData(plain.fatherName),
+        descriptions: plain.descriptions.map((desc) => ({
+          ...desc,
+          text: decryptData(desc.text),
+          date: desc.date,
+        })),
+      };
+    });
+
+    return NextResponse.json({ data: decryptedTeachers }, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -20,16 +47,14 @@ export async function GET() {
   }
 }
 
-// POST: ایجاد پروفایل جدید
 export async function POST(req) {
   try {
     await connectDB();
+    const { fatherName, teacherName, descriptions = [] } = await req.json();
 
-    const { nationalId, teacherName, descriptions = [] } = await req.json();
-
-    if (!nationalId || !teacherName) {
+    if (!fatherName?.trim() || !teacherName?.trim()) {
       return NextResponse.json(
-        { error: "لطفا همه فیلدها را تکمیل کنید" },
+        { error: "لطفا همه فیلدها را به درستی پر کنید" },
         { status: 400 }
       );
     }
@@ -47,9 +72,12 @@ export async function POST(req) {
       return NextResponse.json({ error: "کاربر یافت نشد" }, { status: 404 });
     }
 
+    const rawKey = `${normalize(fatherName)}::${normalize(teacherName)}`;
+    const normalizedKey = hashKey(rawKey);
+
     const existingTeacher = await Teacher.findOne({
       userId: user._id,
-      nationalId,
+      normalizedKey,
     });
 
     if (existingTeacher) {
@@ -59,13 +87,20 @@ export async function POST(req) {
       );
     }
 
-    const cleanedDescriptions = descriptions.filter(
-      (item) => item?.text?.trim() && item?.date
-    );
+    const encryptedFatherName = encryptData(fatherName);
+    const encryptedTeacherName = encryptData(teacherName);
+
+    const cleanedDescriptions = descriptions
+      .filter((item) => item?.text?.trim() && item?.date)
+      .map((item) => ({
+        text: encryptData(item.text),
+        date: item.date,
+      }));
 
     await Teacher.create({
-      nationalId,
-      teacherName,
+      fatherName: encryptedFatherName,
+      teacherName: encryptedTeacherName,
+      normalizedKey,
       descriptions: cleanedDescriptions,
       userId: new Types.ObjectId(user._id),
     });
@@ -80,21 +115,19 @@ export async function POST(req) {
   }
 }
 
-// PATCH: ویرایش پروفایل
 export async function PATCH(req) {
   try {
     await connectDB();
-
     const {
       _id,
-      nationalId,
+      fatherName,
       teacherName,
       descriptions = [],
     } = await req.json();
 
-    if (!_id || !nationalId || !teacherName) {
+    if (!fatherName?.trim() || !teacherName?.trim()) {
       return NextResponse.json(
-        { error: "لطفا همه فیلدها را تکمیل کنید" },
+        { error: "لطفا همه فیلدها را به درستی پر کنید" },
         { status: 400 }
       );
     }
@@ -127,25 +160,31 @@ export async function PATCH(req) {
       );
     }
 
-    // بررسی تکراری بودن nationalId برای سایر پروفایل‌ها
+    const rawKey = `${normalize(fatherName)}::${normalize(teacherName)}`;
+    const normalizedKey = hashKey(rawKey);
+
     const duplicate = await Teacher.findOne({
       _id: { $ne: _id },
       userId: user._id,
-      nationalId,
+      normalizedKey,
     });
 
     if (duplicate) {
       return NextResponse.json(
-        { error: "این کد ملی قبلاً در یک مورد دیگر استفاده شده است" },
+        { error: "این مشخصات قبلاً در یک مورد دیگر استفاده شده است" },
         { status: 409 }
       );
     }
 
-    teacher.nationalId = nationalId;
-    teacher.teacherName = teacherName;
-    teacher.descriptions = descriptions.filter(
-      (item) => item?.text?.trim() && item?.date
-    );
+    teacher.fatherName = encryptData(fatherName);
+    teacher.teacherName = encryptData(teacherName);
+    teacher.normalizedKey = normalizedKey;
+    teacher.descriptions = descriptions
+      .filter((item) => item?.text?.trim() && item?.date)
+      .map((item) => ({
+        text: encryptData(item.text),
+        date: item.date,
+      }));
 
     await teacher.save();
 

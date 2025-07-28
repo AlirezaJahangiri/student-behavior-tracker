@@ -9,10 +9,11 @@ import styles from "@/templates/AddTeacherPage.module.css";
 import Loader from "@/module/Loader";
 import { generatePdfT } from "@/utils/pdfGeneratorT";
 import { motion } from "framer-motion";
+import { decryptData } from "@/utils/encrypt";
 
 function AddTeacherPage({ data }) {
   const [profileData, setProfileData] = useState({
-    nationalId: "",
+    fatherName: "",
     teacherName: "",
     descriptions: [],
   });
@@ -20,8 +21,31 @@ function AddTeacherPage({ data }) {
 
   const router = useRouter();
 
+  function safeDecrypt(value) {
+    try {
+      if (typeof value === "string" && value.startsWith("U2FsdGVkX1")) {
+        return decryptData(value);
+      }
+      return value;
+    } catch (err) {
+      console.error("Decryption error in client:", err);
+      return value;
+    }
+  }
   useEffect(() => {
-    if (data) setProfileData(data);
+    if (data) {
+      const decryptedData = {
+        _id: data._id, // ✅ این خط برای ارسال درست به سروره
+        teacherName: safeDecrypt(data.teacherName),
+        fatherName: safeDecrypt(data.fatherName),
+        descriptions: data.descriptions.map((desc) => ({
+          ...desc,
+          text: safeDecrypt(desc.text),
+          date: desc.date,
+        })),
+      };
+      setProfileData(decryptedData);
+    }
   }, [data]);
 
   const submitHandler = async () => {
@@ -46,6 +70,7 @@ function AddTeacherPage({ data }) {
 
   const editHandler = async () => {
     setLoading(true);
+    console.log("sending profileData:", profileData);
     const res = await fetch("/api/report", {
       method: "PATCH",
       body: JSON.stringify(profileData),
@@ -67,6 +92,8 @@ function AddTeacherPage({ data }) {
   const handleSaveAndDownloadPdf = async () => {
     setLoading(true);
 
+    const loadingToastId = toast.loading("در حال ساخت PDF...");
+
     const response = await fetch("/api/report", {
       method: data ? "PATCH" : "POST",
       headers: { "Content-Type": "application/json" },
@@ -76,15 +103,16 @@ function AddTeacherPage({ data }) {
     const result = await response.json();
     setLoading(false);
 
+    toast.dismiss(loadingToastId);
+
     if (result.error) {
       toast.error(result.error);
       return;
     }
 
-    toast.success(result.message);
-
-    // 📌 اینجا بعد از ذخیره موفق، PDF بساز
     await generatePdfT(profileData);
+
+    toast.success("PDF با موفقیت ساخته شد");
 
     if (!data) {
       setTimeout(() => {
@@ -124,7 +152,7 @@ function AddTeacherPage({ data }) {
           <strong>👤 نام دبیر:</strong> {profileData.teacherName || "-"}
         </p>
         <p>
-          <strong>🆔 کد ملی:</strong> {profileData.nationalId || "-"}
+          <strong>🆔 نام پدر :</strong> {profileData.fatherName || "-"}
         </p>
 
         <hr />
@@ -150,14 +178,14 @@ function AddTeacherPage({ data }) {
 
       <div className={styles.inputsSec1}>
         <TextInput
-          title="کد ملی دبیر"
-          name="nationalId"
+          title="نام و نام خانوادگی دبیر"
+          name="teacherName"
           profileData={profileData}
           setProfileData={setProfileData}
         />
         <TextInput
-          title="نام دبیر"
-          name="teacherName"
+          title="نام پدر"
+          name="fatherName"
           profileData={profileData}
           setProfileData={setProfileData}
         />
