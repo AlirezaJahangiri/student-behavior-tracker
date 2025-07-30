@@ -4,6 +4,9 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { signOut } from "next-auth/react";
 import Loader from "@/module/Loader";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ChangePasswordForm() {
   const [form, setForm] = useState({
@@ -11,6 +14,20 @@ export default function ChangePasswordForm() {
     newPassword: "",
   });
   const [loading, setLoading] = useState(false);
+
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/signin"); // مسیر لاگین
+    }
+  }, [status, router]);
+
+  if (!session) return null; // صبر کن تا ریدایرکت انجام بشه
+
+  if (status === "loading") return <p>در حال بررسی ورود...</p>;
+  if (!session) return <p>دسترسی غیرمجاز</p>;
 
   const submitHandler = async (e) => {
     e.preventDefault();
