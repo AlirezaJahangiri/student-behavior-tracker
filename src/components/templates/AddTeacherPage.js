@@ -70,7 +70,6 @@ function AddTeacherPage({ data }) {
 
   const editHandler = async () => {
     setLoading(true);
-    console.log("sending profileData:", profileData);
     const res = await fetch("/api/report", {
       method: "PATCH",
       body: JSON.stringify(profileData),

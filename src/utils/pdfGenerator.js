@@ -20,7 +20,6 @@ export const generatePdf = async (profileData) => {
   const imgData = canvas.toDataURL("image/png");
 
   const pdf = new jsPDF("p", "mm", "a4");
-  pdf.setFont("Vazir");
   const width = pdf.internal.pageSize.getWidth();
   const imgProps = pdf.getImageProperties(imgData);
   const height = (imgProps.height * width) / imgProps.width;

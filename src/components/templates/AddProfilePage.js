@@ -202,22 +202,27 @@ function AddProfilePage({ data }) {
 
       <div className={styles.inputsSec1}>
         <TextInput
-          title="نام و نام خانوادگی دانش‌آموز"
+          title="نام و نام خانوادگی دانش آموز"
           name="studentName"
           profileData={profileData}
           setProfileData={setProfileData}
+          readOnly={!!data} // فقط در حالت ویرایش readonly باشه
         />
+
         <TextInput
           title="نام پدر"
           name="fatherName"
           profileData={profileData}
           setProfileData={setProfileData}
+          readOnly={!!data}
         />
+
         <TextInput
           title="شماره کلاس"
           name="classNumber"
           profileData={profileData}
           setProfileData={setProfileData}
+          readOnly={!!data}
         />
       </div>
 

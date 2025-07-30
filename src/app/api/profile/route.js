@@ -139,20 +139,10 @@ export async function POST(req) {
 export async function PATCH(req) {
   try {
     await connectDB();
-    const {
-      _id,
-      fatherName,
-      studentName,
-      classNumber,
-      punishments = [],
-      encouragements = [],
-    } = await req.json();
+    const { _id, encouragements = [], punishments = [] } = await req.json();
 
-    if (!fatherName?.trim() || !studentName?.trim() || !classNumber?.trim()) {
-      return NextResponse.json(
-        { error: "لطفا همه فیلدها را به درستی پر کنید" },
-        { status: 400 }
-      );
+    if (!_id) {
+      return NextResponse.json({ error: "شناسه معتبر نیست" }, { status: 400 });
     }
 
     const session = await getServerSession(req);
@@ -183,35 +173,14 @@ export async function PATCH(req) {
       );
     }
 
-    const rawKey = `${normalize(fatherName)}::${normalize(
-      studentName
-    )}::${normalize(classNumber)}`;
-    const normalizedKey = hashKey(rawKey);
-
-    const duplicate = await Profile.findOne({
-      _id: { $ne: _id },
-      userId: user._id,
-      normalizedKey,
-    });
-
-    if (duplicate) {
-      return NextResponse.json(
-        { error: "این مشخصات قبلاً در یک مورد دیگر استفاده شده است" },
-        { status: 409 }
-      );
-    }
-
-    profile.fatherName = encryptData(fatherName);
-    profile.studentName = encryptData(studentName);
-    profile.classNumber = encryptData(classNumber);
-    profile.normalizedKey = normalizedKey;
-    profile.punishments = punishments
+    profile.encouragements = encouragements
       .filter((item) => item?.text?.trim() && item?.date)
       .map((item) => ({
         text: encryptData(item.text),
         date: item.date,
       }));
-    profile.encouragements = encouragements
+
+    profile.punishments = punishments
       .filter((item) => item?.text?.trim() && item?.date)
       .map((item) => ({
         text: encryptData(item.text),
