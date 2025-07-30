@@ -183,12 +183,15 @@ function AddTeacherPage({ data }) {
           name="teacherName"
           profileData={profileData}
           setProfileData={setProfileData}
+          readOnly={!!data} // فقط در حالت ویرایش readonly باشه
         />
+
         <TextInput
           title="نام پدر"
           name="fatherName"
           profileData={profileData}
           setProfileData={setProfileData}
+          readOnly={!!data}
         />
       </div>
 

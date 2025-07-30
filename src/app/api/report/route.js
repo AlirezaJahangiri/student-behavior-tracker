@@ -11,7 +11,6 @@ function normalize(input) {
   return input?.trim().replace(/\s+/g, " ").toLowerCase();
 }
 
-// هش کردن کلید نرمال‌شده
 function hashKey(input) {
   return crypto.createHash("sha256").update(input).digest("hex");
 }
@@ -116,18 +115,10 @@ export async function POST(req) {
 export async function PATCH(req) {
   try {
     await connectDB();
-    const {
-      _id,
-      fatherName,
-      teacherName,
-      descriptions = [],
-    } = await req.json();
+    const { _id, descriptions = [] } = await req.json();
 
-    if (!fatherName?.trim() || !teacherName?.trim()) {
-      return NextResponse.json(
-        { error: "لطفا همه فیلدها را به درستی پر کنید" },
-        { status: 400 }
-      );
+    if (!_id) {
+      return NextResponse.json({ error: "شناسه معتبر نیست" }, { status: 400 });
     }
 
     const session = await getServerSession(req);
@@ -158,25 +149,7 @@ export async function PATCH(req) {
       );
     }
 
-    const rawKey = `${normalize(fatherName)}::${normalize(teacherName)}`;
-    const normalizedKey = hashKey(rawKey);
-
-    const duplicate = await Teacher.findOne({
-      _id: { $ne: _id },
-      userId: user._id,
-      normalizedKey,
-    });
-
-    if (duplicate) {
-      return NextResponse.json(
-        { error: "این مشخصات قبلاً در یک مورد دیگر استفاده شده است" },
-        { status: 409 }
-      );
-    }
-
-    teacher.fatherName = encryptData(fatherName);
-    teacher.teacherName = encryptData(teacherName);
-    teacher.normalizedKey = normalizedKey;
+    // فقط descriptions ویرایش می‌شود
     teacher.descriptions = descriptions
       .filter((item) => item?.text?.trim() && item?.date)
       .map((item) => ({
