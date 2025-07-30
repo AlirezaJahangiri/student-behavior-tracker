@@ -10,8 +10,11 @@ import styles from "@/templates/SignupPage.module.css";
 import Loader from "@/module/Loader";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import ContactModal from "@/module/ContactModal";
-
+import { useSearchParams } from "next/navigation"; // بالای فایل
+import { useEffect } from "react";
 function SigninPage() {
+  const searchParams = useSearchParams();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,6 +22,12 @@ function SigninPage() {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (searchParams.get("passwordUpdated") === "true") {
+      toast.success("رمز عبور با موفقیت تغییر کرد. لطفاً دوباره وارد شوید.");
+    }
+  }, [searchParams]);
 
   const signinHandler = async (e) => {
     e.preventDefault();
