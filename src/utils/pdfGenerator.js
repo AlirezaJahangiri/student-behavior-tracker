@@ -27,7 +27,7 @@ export const generatePdf = async (profileData) => {
   pdf.addImage(imgData, "JPEG", 0, 0, width, height, undefined, "FAST");
   const studentName =
     profileData.studentName?.replace(/\s+/g, "_") || "student";
-  const nationalId = profileData.nationalId || "no-id";
+  const fatherName = profileData.fatherName || "no-id";
 
-  pdf.save(`${studentName}_${nationalId}_گزارش_انضباطی.pdf`);
+  pdf.save(`${studentName}_${fatherName}_گزارش_انضباطی.pdf`);
 };

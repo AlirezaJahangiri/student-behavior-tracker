@@ -3,8 +3,9 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import User from "@/models/User";
 import connectDB from "@/utils/connectDB";
 import MyProfilesPage from "@/templates/MyProfilesPage";
+import { decryptData } from "@/utils/encrypt";
 
-async function Myprofiles() {
+async function MyProfiles() {
   await connectDB();
   const session = await getServerSession(authOptions);
 
@@ -19,28 +20,32 @@ async function Myprofiles() {
       },
     },
   ]);
-  // 👇 تبدیل ObjectId و Date به string برای ارسال به کامپوننت کلاینت
-  const plainProfiles = user.profiles.map((profile) => ({
+
+  const plainProfles = user.profiles.map((profile) => ({
     ...profile,
     _id: profile._id.toString(),
     userId: profile.userId.toString(),
     createdAt: new Date(profile.createdAt).toISOString(),
     updatedAt: new Date(profile.updatedAt).toISOString(),
-    encouragements:
-      profile.encouragements?.map((item) => ({
-        ...item,
-        _id: item._id.toString(),
-        date: item.date?.toISOString?.(),
-      })) || [],
-    punishments:
-      profile.punishments?.map((item) => ({
-        ...item,
-        _id: item._id.toString(),
-        date: item.date?.toISOString?.(),
-      })) || [],
+    studentName: decryptData(profile.studentName),
+    fatherName: decryptData(profile.fatherName),
+    classNumber: decryptData(profile.classNumber),
+    punishments: profile.punishments.map((punishment) => ({
+      ...punishment,
+      _id: punishment._id?.toString(),
+      date: new Date(punishment.date).toISOString(),
+      text: decryptData(punishment.text),
+    })),
+
+    encouragements: profile.encouragements.map((encouragement) => ({
+      ...encouragement,
+      _id: encouragement._id?.toString(),
+      date: new Date(encouragement.date).toISOString(),
+      text: decryptData(encouragement.text),
+    })),
   }));
 
-  return <MyProfilesPage profiles={plainProfiles} />;
+  return <MyProfilesPage profiles={plainProfles} />;
 }
 
-export default Myprofiles;
+export default MyProfiles;

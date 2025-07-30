@@ -4,13 +4,43 @@ import { Types } from "mongoose";
 import connectDB from "@/utils/connectDB";
 import User from "@/models/User";
 import Profile from "@/models/Profile";
+import crypto from "crypto";
+import { encryptData, decryptData } from "@/utils/encrypt";
 
-// GET: دریافت همه پروفایل‌های منتشر شده
+function normalize(input) {
+  return input?.trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+function hashKey(input) {
+  return crypto.createHash("sha256").update(input).digest("hex");
+}
+
 export async function GET() {
   try {
     await connectDB();
     const profiles = await Profile.find({ published: true }).select("-userId");
-    return NextResponse.json({ data: profiles }, { status: 200 });
+
+    const decryptedProfiles = profiles.map((profile) => {
+      const plain = profile.toObject();
+      return {
+        ...plain,
+        studentName: decryptData(plain.studentName),
+        fatherName: decryptData(plain.fatherName),
+        classNumber: decryptData(plain.classNumber),
+        encouragements: plain.encouragements.map((encouragement) => ({
+          ...encouragement,
+          text: decryptData(encouragement.text),
+          date: encouragement.date,
+        })),
+        punishments: plain.punishments.map((punishment) => ({
+          ...punishment,
+          text: decryptData(punishment.text),
+          date: punishment.date,
+        })),
+      };
+    });
+
+    return NextResponse.json({ data: decryptedProfiles }, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -20,22 +50,20 @@ export async function GET() {
   }
 }
 
-// POST: ایجاد پروفایل جدید
 export async function POST(req) {
   try {
     await connectDB();
-
     const {
+      fatherName,
       classNumber,
-      nationalId,
       studentName,
       encouragements = [],
       punishments = [],
     } = await req.json();
 
-    if (!classNumber || !nationalId || !studentName) {
+    if (!fatherName?.trim() || !studentName?.trim() || !classNumber?.trim()) {
       return NextResponse.json(
-        { error: "لطفا همه فیلدها را تکمیل کنید" },
+        { error: "لطفا همه فیلدها را به درستی پر کنید" },
         { status: 400 }
       );
     }
@@ -53,9 +81,14 @@ export async function POST(req) {
       return NextResponse.json({ error: "کاربر یافت نشد" }, { status: 404 });
     }
 
+    const rawKey = `${normalize(studentName)}::${normalize(
+      fatherName
+    )}::${normalize(classNumber)}`;
+    const normalizedKey = hashKey(rawKey);
+
     const existingProfile = await Profile.findOne({
       userId: user._id,
-      nationalId,
+      normalizedKey,
     });
 
     if (existingProfile) {
@@ -65,27 +98,35 @@ export async function POST(req) {
       );
     }
 
-    const cleanedEncouragements = encouragements.filter(
-      (item) => item?.text?.trim() && item?.date
-    );
+    const encryptedFatherName = encryptData(fatherName);
+    const encryptedStudentName = encryptData(studentName);
+    const encryptedClassNumber = encryptData(classNumber);
 
-    const cleanedPunishments = punishments.filter(
-      (item) => item?.text?.trim() && item?.date
-    );
+    const cleanedPunishments = punishments
+      .filter((item) => item?.text?.trim() && item?.date)
+      .map((item) => ({
+        text: encryptData(item.text),
+        date: item.date,
+      }));
+
+    const cleanedEncouragements = encouragements
+      .filter((item) => item?.text?.trim() && item?.date)
+      .map((item) => ({
+        text: encryptData(item.text),
+        date: item.date,
+      }));
 
     await Profile.create({
-      classNumber,
-      nationalId,
-      studentName,
+      fatherName: encryptedFatherName,
+      studentName: encryptedStudentName,
+      classNumber: encryptedClassNumber,
+      normalizedKey,
       encouragements: cleanedEncouragements,
       punishments: cleanedPunishments,
       userId: new Types.ObjectId(user._id),
     });
 
-    return NextResponse.json(
-      { message: "مورد انضباطی با موفقیت ثبت شد" },
-      { status: 201 }
-    );
+    return NextResponse.json({ message: "با موفقیت ثبت شد" }, { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -95,23 +136,21 @@ export async function POST(req) {
   }
 }
 
-// PATCH: ویرایش پروفایل
 export async function PATCH(req) {
   try {
     await connectDB();
-
     const {
       _id,
-      classNumber,
-      nationalId,
+      fatherName,
       studentName,
-      encouragements = [],
+      classNumber,
       punishments = [],
+      encouragements = [],
     } = await req.json();
 
-    if (!_id || !classNumber || !nationalId || !studentName) {
+    if (!fatherName?.trim() || !studentName?.trim() || !classNumber?.trim()) {
       return NextResponse.json(
-        { error: "لطفا همه فیلدها را تکمیل کنید" },
+        { error: "لطفا همه فیلدها را به درستی پر کنید" },
         { status: 400 }
       );
     }
@@ -144,29 +183,40 @@ export async function PATCH(req) {
       );
     }
 
-    // بررسی تکراری بودن nationalId برای سایر پروفایل‌ها
+    const rawKey = `${normalize(fatherName)}::${normalize(
+      studentName
+    )}::${normalize(classNumber)}`;
+    const normalizedKey = hashKey(rawKey);
+
     const duplicate = await Profile.findOne({
       _id: { $ne: _id },
       userId: user._id,
-      nationalId,
+      normalizedKey,
     });
 
     if (duplicate) {
       return NextResponse.json(
-        { error: "این کد ملی قبلاً در یک مورد دیگر استفاده شده است" },
+        { error: "این مشخصات قبلاً در یک مورد دیگر استفاده شده است" },
         { status: 409 }
       );
     }
 
-    profile.classNumber = classNumber;
-    profile.nationalId = nationalId;
-    profile.studentName = studentName;
-    profile.encouragements = encouragements.filter(
-      (item) => item?.text?.trim() && item?.date
-    );
-    profile.punishments = punishments.filter(
-      (item) => item?.text?.trim() && item?.date
-    );
+    profile.fatherName = encryptData(fatherName);
+    profile.studentName = encryptData(studentName);
+    profile.classNumber = encryptData(classNumber);
+    profile.normalizedKey = normalizedKey;
+    profile.punishments = punishments
+      .filter((item) => item?.text?.trim() && item?.date)
+      .map((item) => ({
+        text: encryptData(item.text),
+        date: item.date,
+      }));
+    profile.encouragements = encouragements
+      .filter((item) => item?.text?.trim() && item?.date)
+      .map((item) => ({
+        text: encryptData(item.text),
+        date: item.date,
+      }));
 
     await profile.save();
 

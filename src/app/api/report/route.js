@@ -2,13 +2,11 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { Types } from "mongoose";
 import crypto from "crypto";
-
 import connectDB from "@/utils/connectDB";
 import User from "@/models/User";
 import Teacher from "@/models/Teacher";
 import { encryptData, decryptData } from "@/utils/encrypt";
 
-// نرمال‌سازی ورودی (حذف فاصله‌ها و تبدیل به حروف کوچک)
 function normalize(input) {
   return input?.trim().replace(/\s+/g, " ").toLowerCase();
 }

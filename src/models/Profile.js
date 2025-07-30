@@ -6,7 +6,7 @@ const profileSchema = new Schema(
       type: String,
       required: true,
     },
-    nationalId: {
+    fatherName: {
       type: String,
       required: true,
     },
@@ -14,7 +14,13 @@ const profileSchema = new Schema(
       type: String,
       required: true,
     },
-   
+
+    normalizedKey: {
+      type: String,
+      required: true,
+      index: true,
+    },
+
     encouragements: {
       type: [
         {

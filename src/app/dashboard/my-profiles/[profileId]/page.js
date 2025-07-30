@@ -39,3 +39,5 @@ export default async function Edit({ params }) {
 
   return <AddProfilePage data={safeProfile} />;
 }
+
+

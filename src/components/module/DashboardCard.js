@@ -2,8 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "react-hot-toast";
-import { AiOutlineDelete } from "react-icons/ai";
-import { FiEdit } from "react-icons/fi";
 import Card from "@/module/Card";
 import styles from "@/module/DashboardCard.module.css";
 import { useState } from "react";
@@ -16,10 +14,7 @@ function DashboardCard({ data }) {
   const filtered = Array.isArray(data)
     ? data.filter((profile) => {
         const keyword = search.toLowerCase();
-        return (
-          profile.studentName.toLowerCase().includes(keyword) ||
-          profile.nationalId.toLowerCase().includes(keyword)
-        );
+        return profile.studentName.toLowerCase().includes(keyword);
       })
     : [];
 
@@ -44,7 +39,7 @@ function DashboardCard({ data }) {
     <div className={styles.container}>
       <input
         type="text"
-        placeholder="جستجو  بر اساس نام  یا  شماره  دانش آموزی"
+        placeholder="جستجو  بر اساس نام و نام خانوادگی دانش آموز"
         value={search}
         onChange={(e) => setSearch(p2e(e.target.value))}
       />
@@ -68,3 +63,5 @@ function DashboardCard({ data }) {
 }
 
 export default DashboardCard;
+
+

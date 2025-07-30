@@ -9,12 +9,13 @@ import styles from "@/templates/AddProfilePage.module.css";
 import Loader from "@/module/Loader";
 import { generatePdf } from "@/utils/pdfGenerator";
 import { motion } from "framer-motion";
+import { decryptData } from "@/utils/encrypt";
 
 function AddProfilePage({ data }) {
   const [profileData, setProfileData] = useState({
-    classNumber: "",
-    nationalId: "",
+    fatherName: "",
     studentName: "",
+    classNumber: "",
     encouragements: [],
     punishments: [],
   });
@@ -22,8 +23,37 @@ function AddProfilePage({ data }) {
 
   const router = useRouter();
 
+  function safeDecrypt(value) {
+    try {
+      if (typeof value === "string" && value.startsWith("U2FsdGVkX1")) {
+        return decryptData(value);
+      }
+      return value;
+    } catch (err) {
+      console.error("Decryption error in client:", err);
+      return value;
+    }
+  }
   useEffect(() => {
-    if (data) setProfileData(data);
+    if (data) {
+      const decryptedData = {
+        _id: data._id, // ✅ این خط برای ارسال درست به سروره
+        studentName: safeDecrypt(data.studentName),
+        fatherName: safeDecrypt(data.fatherName),
+        classNumber: safeDecrypt(data.classNumber),
+        punishments: data.punishments.map((punishment) => ({
+          ...punishment,
+          text: safeDecrypt(punishment.text),
+          date: punishment.date,
+        })),
+        encouragements: data.encouragements.map((encouragement) => ({
+          ...encouragement,
+          text: safeDecrypt(encouragement.text),
+          date: encouragement.date,
+        })),
+      };
+      setProfileData(decryptedData);
+    }
   }, [data]);
 
   const submitHandler = async () => {
@@ -48,6 +78,7 @@ function AddProfilePage({ data }) {
 
   const editHandler = async () => {
     setLoading(true);
+    console.log("sending profileData:", profileData);
     const res = await fetch("/api/profile", {
       method: "PATCH",
       body: JSON.stringify(profileData),
@@ -69,6 +100,8 @@ function AddProfilePage({ data }) {
   const handleSaveAndDownloadPdf = async () => {
     setLoading(true);
 
+    const loadingToastId = toast.loading("در حال ساخت PDF...");
+
     const response = await fetch("/api/profile", {
       method: data ? "PATCH" : "POST",
       headers: { "Content-Type": "application/json" },
@@ -78,15 +111,16 @@ function AddProfilePage({ data }) {
     const result = await response.json();
     setLoading(false);
 
+    toast.dismiss(loadingToastId);
+
     if (result.error) {
       toast.error(result.error);
       return;
     }
 
-    toast.success(result.message);
-
-    // 📌 اینجا بعد از ذخیره موفق، PDF بساز
     await generatePdf(profileData);
+
+    toast.success("PDF با موفقیت ساخته شد");
 
     if (!data) {
       setTimeout(() => {
@@ -123,13 +157,14 @@ function AddProfilePage({ data }) {
         <h2 style={{ textAlign: "center" }}>📝 گزارش انضباطی دانش‌آموز</h2>
 
         <p>
-          <strong>👤 نام دانش‌آموز:</strong> {profileData.studentName || "-"}
+          <strong>👤 نام و نام خانوادگی دانش‌آموز:</strong>{" "}
+          {profileData.studentName || "-"}
         </p>
         <p>
-          <strong>🆔 کد دانش‌آموزی:</strong> {profileData.nationalId || "-"}
+          <strong>🆔 نام پدر:</strong> {profileData.fatherName || "-"}
         </p>
         <p>
-          <strong>🏫 کلاس:</strong> {profileData.classNumber || "-"}
+          <strong>🏫 شماره کلاس:</strong> {profileData.classNumber || "-"}
         </p>
 
         <hr />
@@ -167,14 +202,14 @@ function AddProfilePage({ data }) {
 
       <div className={styles.inputsSec1}>
         <TextInput
-          title="شماره دانش‌آموزی"
-          name="nationalId"
+          title="نام و نام خانوادگی دانش‌آموز"
+          name="studentName"
           profileData={profileData}
           setProfileData={setProfileData}
         />
         <TextInput
-          title="نام دانش‌آموز"
-          name="studentName"
+          title="نام پدر"
+          name="fatherName"
           profileData={profileData}
           setProfileData={setProfileData}
         />

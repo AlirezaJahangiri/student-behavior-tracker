@@ -149,7 +149,8 @@ function AddTeacherPage({ data }) {
         <h2 style={{ textAlign: "center" }}>📝 گزارش کار دبیر</h2>
 
         <p>
-          <strong>👤 نام دبیر:</strong> {profileData.teacherName || "-"}
+          <strong>👤 نام و نام خانوادگی دبیر:</strong>{" "}
+          {profileData.teacherName || "-"}
         </p>
         <p>
           <strong>🆔 نام پدر :</strong> {profileData.fatherName || "-"}

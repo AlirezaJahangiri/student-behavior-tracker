@@ -39,7 +39,7 @@ function DashboardCardT({ data }) {
     <div className={styles.container}>
       <input
         type="text"
-        placeholder="جستجو بر اساس نام دبیر"
+        placeholder="جستجو بر اساس نام و نام خانوادگی دبیر"
         value={search}
         onChange={(e) => setSearch(p2e(e.target.value))}
       />
