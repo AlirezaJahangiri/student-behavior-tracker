@@ -20,18 +20,16 @@ function DashboardSidebar({ children, schoolName, role }) {
 
   const sidebarRef = useRef();
 
-  // تشخیص اندازه صفحه
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth <= 771);
     };
 
-    checkScreenSize(); // بار اول
+    checkScreenSize(); 
     window.addEventListener("resize", checkScreenSize);
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  // بستن با انیمیشن
   const closeSidebarWithAnimation = () => {
     setIsAnimatingClose(true);
     setTimeout(() => {
@@ -40,14 +38,12 @@ function DashboardSidebar({ children, schoolName, role }) {
     }, 300);
   };
 
-  // کلیک روی لینک فقط در موبایل باعث بستن شود
   const onLinkClick = () => {
     if (isMobile) {
       closeSidebarWithAnimation();
     }
   };
 
-  // کلیک بیرون سایدبار
   useEffect(() => {
     if (!isOpen) return;
 
@@ -63,7 +59,6 @@ function DashboardSidebar({ children, schoolName, role }) {
 
   return (
     <div className={styles.container}>
-      {/* دکمه همبرگر فقط در موبایل */}
       {isMobile && (
         <button
           className={styles.hamburger}

@@ -10,7 +10,7 @@ import styles from "@/templates/SignupPage.module.css";
 import Loader from "@/module/Loader";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import ContactModal from "@/module/ContactModal";
-import { useSearchParams } from "next/navigation"; // بالای فایل
+import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 function SigninPage() {
   const searchParams = useSearchParams();

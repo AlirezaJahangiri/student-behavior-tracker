@@ -20,13 +20,11 @@
   z-index: 10;
 }
 
-/* آیکون */
 .sidebar svg {
   font-size: 3rem;
   color: #304ffe;
 }
 
-/* ایمیل */
 .sidebar p {
   color: #333333;
   font-size: 1.1rem;
@@ -52,7 +50,6 @@
   width: 100%;
 }
 
-/* لینک‌ها */
 .sidebar a {
   display: block;
   padding: 10px 14px;
@@ -131,7 +128,6 @@
 
 }
 
-/* انیمیشن بستن */
 @keyframes slideOut {
   from {
     transform: translateX(0);
@@ -141,7 +137,6 @@
   }
 }
 
-/* حالت باز و بسته سایدبار */
 .sidebar.open {
   transform: translateX(0);
 }
@@ -150,7 +145,6 @@
   animation: slideOut 0.3s forwards;
 }
 
-/* حالت موبایل */
 @media (max-width: 771px) {
   .container {
     flex-direction: column;

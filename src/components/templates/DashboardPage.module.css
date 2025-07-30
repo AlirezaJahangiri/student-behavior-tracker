@@ -28,3 +28,22 @@
 .createdAt span {
   color: #304ffe;
 }
+
+.changePassword {
+  margin-top: 3rem;
+  border: none;
+  padding: 0.7rem;
+  color: white;
+  background-color: #304ffe;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 400;
+  transition: all ease-in 0.2s;
+}
+
+.changePassword:hover {
+  background-color: white;
+  color: #304ffe;
+  border: 1px solid #304ffe;
+}

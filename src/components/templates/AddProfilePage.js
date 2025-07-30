@@ -206,7 +206,7 @@ function AddProfilePage({ data }) {
           name="studentName"
           profileData={profileData}
           setProfileData={setProfileData}
-          readOnly={!!data} // فقط در حالت ویرایش readonly باشه
+          readOnly={!!data} 
         />
 
         <TextInput

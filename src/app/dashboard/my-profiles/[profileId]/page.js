@@ -7,7 +7,6 @@ export default async function Edit({ params }) {
 
   const { profileId } = await params;
 
-  // اگر profileId نبود، ارور برگردون
   if (!profileId) {
     return <h3>شناسه پروفایل نامعتبر است</h3>;
   }
@@ -18,7 +17,6 @@ export default async function Edit({ params }) {
     return <h3>موردی یافت نشد</h3>;
   }
 
-  // پاکسازی فیلدهای غیرقابل‌ارسال به کلاینت
   const safeProfile = {
     ...profile,
     _id: profile._id.toString(),

@@ -35,7 +35,7 @@ function AddTeacherPage({ data }) {
   useEffect(() => {
     if (data) {
       const decryptedData = {
-        _id: data._id, // ✅ این خط برای ارسال درست به سروره
+        _id: data._id, 
         teacherName: safeDecrypt(data.teacherName),
         fatherName: safeDecrypt(data.fatherName),
         descriptions: data.descriptions.map((desc) => ({

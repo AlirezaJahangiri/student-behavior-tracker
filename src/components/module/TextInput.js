@@ -14,7 +14,6 @@ function TextInput({
 
     let { name: fieldName, value } = e.target;
 
-    // فقط اعداد برای فیلدهای خاص
     if (fieldName === "classNumber") {
       value = p2e(value).replace(/\D/g, "");
       if (value.length > 3) return;

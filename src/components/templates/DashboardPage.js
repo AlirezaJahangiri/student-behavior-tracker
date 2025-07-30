@@ -2,8 +2,15 @@
 
 import { motion } from "framer-motion";
 import styles from "@/templates/DashboardPage.module.css";
+import { useRouter } from "next/navigation";
 
 function DashboardPage({ createdAt }) {
+  const router = useRouter();
+
+  const changePasswordHandler = () => {
+    router.replace("/change-password");
+  };
+
   return (
     <motion.div
       className={styles.container}
@@ -18,6 +25,9 @@ function DashboardPage({ createdAt }) {
         محدودیت.
       </p>
 
+      <button onClick={changePasswordHandler} className={styles.changePassword}>
+        تغییر رمز عبور
+      </button>
       <div className={styles.createdAt}>
         <p>تاریخ عضویت:</p>
         <span>{new Date(createdAt).toLocaleDateString("fa-IR")}</span>
